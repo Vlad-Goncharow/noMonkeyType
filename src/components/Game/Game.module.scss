@@ -48,5 +48,12 @@
       width: 2px;
       background: #fbbf24;
     }
+
+    &_right{
+      &:before {
+        left: auto;
+        right: -1px;
+      }
+    }
   }
 }

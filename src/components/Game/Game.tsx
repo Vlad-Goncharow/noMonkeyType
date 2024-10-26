@@ -82,7 +82,7 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
       className='flex flex-wrap items-center mt-10'
     >
       {
-        typedCorrectWords.map((wordEl: string, wordI: number) => 
+        typedCorrectWords.map((wordEl: any, wordI: any) => 
           <div 
             key={`${wordEl}-${wordI}`} 
             className={classNames(s.word,{
@@ -90,11 +90,19 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
             })}
           >
             {
-              wordEl.split('').map((letterEl, letterI) => 
+              wordEl.split('').map((letterEl:any, letterI:any) => 
                 <div key={`${wordI}-${letterI}`} className={classNames(s.letter, s.letter__defautl,{
                   [s.letter__correct]: typedWords[wordI][letterI] === typedCorrectWords[wordI][letterI],
                   [s.letter__wrong]: typedWords[wordI][letterI] !== typedCorrectWords[wordI][letterI] && typedWords[wordI][letterI] !== undefined,
                 })}>
+                  {letterEl}
+                </div>
+              )
+            }
+            {
+              typedWords[wordI].length > wordEl.length && 
+              typedWords[wordI].slice(wordEl.length).map((letterEl:any, letterI:any) => 
+                <div key={`${wordI}-${letterI}`} className={classNames(s.letter, s.letter__wrong)}>
                   {letterEl}
                 </div>
               )
@@ -112,9 +120,20 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
                   (typedLetterIndex === letterI && wordI === typedWordIndex && letterI - 1 > typedLetterIndex)
                     || 
                   (wordI === typedWordIndex && showedWordsArray[typedWordIndex][letterI] === typedWord[letterI]),
-                  [s.letter__needed]: wordI === typedWordIndex && letterI === typedLetterIndex,
-                  // [s.letter__wrong]: wordI === typedWordIndex && letterI <= typedLetterIndex && correctWords[typedWordIndex][letterI] !== typedWord[letterI]
+                  [s.letter__needed]: wordI === typedWordIndex && letterI === typedLetterIndex && wordEl.length !== typedLetterIndex,
+                  [`${s.letter__needed} ${s.letter__needed_right}`]: wordI === typedWordIndex && letterI === typedLetterIndex - 1 && wordEl.length === typedLetterIndex,
                   [s.letter__wrong]: wordI === typedWordIndex && showedWordsArray[typedWordIndex][letterI] !== typedWord[letterI] && letterI < typedWord.length
+                })}>
+                  {letterEl}
+                </div>
+              )
+            }
+            {
+              typedWord.length > wordEl.length && wordI === typedWordIndex &&
+              typedWord.slice(wordEl.length).map((letterEl:any, letterI:any) => 
+                <div key={`${wordI}-${letterI}`} className={classNames(s.letter, s.letter__wrong,{
+                  [s.letter__needed]: letterI === typedLetterIndex - wordEl.length - 1,
+                  [s.letter__needed_right]: letterI === typedLetterIndex - wordEl.length - 1
                 })}>
                   {letterEl}
                 </div>
