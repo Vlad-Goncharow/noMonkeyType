@@ -1,0 +1,10 @@
+:root {
+  --form-bg: #eeeeee;
+  --form-radios: 10px;
+  --header-height: 65px;
+  --user-stats: 125px;
+
+  @media (max-width: 786px) {
+    --user-stats: 100px;
+  }
+}
