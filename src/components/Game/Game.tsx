@@ -3,6 +3,9 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { getGameData } from '../../redux/slices/GameSettings/selectors'
 import s from './Game.module.scss'
 import classNames from 'classnames'
+import { useAppDispatch } from '../../hooks/useAppDispatch'
+import { GameSettingsActions } from '../../redux/slices/GameSettings'
+import { GameResultsActions } from '../../redux/slices/GameResult'
 
 interface GameTypes{
   gameWords:string
@@ -10,19 +13,21 @@ interface GameTypes{
 
 
 const Game:React.FC<GameTypes> = ({gameWords}) => {
-  //100%
-  const [gameWordsArray, setGameWordsArray] = React.useState<any>(gameWords.split(' '))
+  const dispatch = useAppDispatch()
+  const gameWordsArray = gameWords.split(' ')
+  const typedWordIndex = 0
+
   const [showedWordsArray, setShowedWordsArray] = React.useState<any>([...gameWordsArray])
 
-  const {type, time, words} = useAppSelector(getGameData)
+  const {isGameStarted,isGameEnded} = useAppSelector(getGameData)
   
-  const [typedWordIndex, setTypesWordIndex] = React.useState(0)
   const [typedLetterIndex, setTypedLetterIndex] = React.useState(0)
 
   const [typedWords, setTypedWords] = React.useState<any>([])
   const [typedWord, setTypedWord] = React.useState<any>([])
 
   const [typedCorrectWords, setTypedCorrectWords] = React.useState<any>([])
+
   const listenSpace = React.useCallback((e:any) => {
     if(e.key === ' '  && typedWord.length > 0){
       setTypedWords((prev:any) => [...prev, typedWord])
@@ -35,10 +40,52 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
     }
   },[typedWord])
 
+  const gameResults = React.useRef<any>({
+    typedCharacters: 0,
+    typedCorrectCharacters: 0,
+  })
+
+  const [errors, setErrors] = React.useState(0)
+  const [timeElapsed, setTimeElapsed] = React.useState<number>(0)
+
+
+  const calcRes = React.useCallback(() => {
+    if(timeElapsed > 0){
+      const wpm = Math.round(((gameResults.current.typedCorrectCharacters || 0) / 5) / (timeElapsed / 60));
+      const raw = Math.round(((gameResults.current.typedCharacters || 0) / 5) / (timeElapsed / 60));
+      const currentErrors = errors
+
+      dispatch(GameResultsActions.updateResults({
+        secondStats: { errors: currentErrors, wpm, raw, second:timeElapsed },
+        typedCharacters: gameResults.current.typedCharacters,
+        typedCorrectCharacters: gameResults.current.typedCorrectCharacters,
+        time:timeElapsed
+      }))
+      setErrors(0)
+    }
+  },[errors, timeElapsed])
+  
+  
   const myKeyDown = (e:any) => {
     let charCode = e.keyCode
+    const isLetterOrNumber = 
+      (charCode >= 48 && charCode <= 57) || 
+      (charCode >= 65 && charCode <= 90) || 
+      (charCode >= 97 && charCode <= 122) || 
+      (charCode >= 1040 && charCode <= 1103);
     
-    if(e.key !== ' ' && e.key !== 'Backspace' && charCode !== 18) {
+    if(e.key !== ' ' && isLetterOrNumber) {
+      dispatch(GameSettingsActions.changeIsGameIsStarded(true))
+      
+      gameResults.current = {
+        typedCharacters: (gameResults.current.typedCharacters || 0) + 1,
+        typedCorrectCharacters:gameResults.current.typedCorrectCharacters + (e.key === showedWordsArray[0][typedLetterIndex] ? 1 : 0),
+      }
+
+      if(e.key !== showedWordsArray[0][typedLetterIndex]){
+        setErrors(prev => prev + 1)
+      }
+
       setTypedWord((prev:any) => [...prev,e.key])
       setTypedLetterIndex(prev => prev + 1)
     }
@@ -76,6 +123,20 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
       document.removeEventListener('keyup', listenSpace)
     }
   },[typedWord])
+
+  React.useEffect(() => {
+    if(isGameStarted && !isGameEnded){
+      const interval = setInterval(() => {
+        setTimeElapsed(prev => prev + 1)
+      }, 1000) 
+
+      return () => clearInterval(interval)
+    }
+  }, [isGameStarted,isGameEnded])
+
+  React.useEffect(() => {
+    calcRes()
+  }, [timeElapsed])
   
   return (
     <div 
