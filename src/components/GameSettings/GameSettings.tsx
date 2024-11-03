@@ -6,10 +6,11 @@ import { timesArray, typesArray, wordsArray } from '../../config/GameConfig'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { GameSettingsActions } from '../../redux/slices/GameSettings'
 import classNames from 'classnames'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function GameSettings() {
   const dispatch = useAppDispatch()
-  const {type, time, words} = useAppSelector(getGameData)
+  const {type, time, words,isGameEnded,isGameStarted} = useAppSelector(getGameData)
 
   const changeType = (type: 'time' | 'words') => {
     dispatch(GameSettingsActions.changeType(type))
@@ -24,54 +25,62 @@ function GameSettings() {
   }
   
   return (
-    <div className='flex item items-center m-auto mx-4 bg-black p-2'>
-      <div className='flex'>
-        {
-          typesArray.map(el => 
-            <div 
-              className={classNames('mr-4 p-1 pl-3 pr-3 bg-slate-500 text-white last:mr-0',{
-                ['bg-blue-500']: el === type
-              })}
-              key={el}
-              onClick={() => changeType(el)}
-            >
-              {el}
-            </div>
-          )
-        }
-      </div>
-      <div className='ml-4 mr-4'>|</div>
-      <div className='flex'>
-        {
-          type === 'time' &&
-          timesArray.map(el => 
-            <div 
-              className={classNames('mr-4 text-white',{
-                ['text-red-700']:el === time
-              })}
-              key={el}
-              onClick={() => changeTime(el)}
-            >
-              {el}
-            </div>
-          )
-        }
-      </div>
-      <div className='flex'>
-        {
-          type === 'words' &&
-          wordsArray.map(el => 
-            <div 
-              className={classNames('mr-4 text-white',{
-                ['text-red-700']: el === words
-              })}
-              onClick={() => changeWords(el)}
-              key={el}
-            >
-              {el}
-            </div>
-          )
-        }
+    <div id='testConfig' className={classNames('rowfull-width',{
+      'invisible':isGameEnded && !isGameStarted
+    })}>
+      <div className="row">
+        <div className='mode'>
+          {
+            typesArray.map(el => 
+              <button
+                type='button' 
+                className={classNames('textButton',{
+                  'active': el.type === type
+                })}
+                key={el.type}
+                onClick={() => changeType(el.type)}
+              >
+                <FontAwesomeIcon icon={el.icon} />
+                {el.type}
+              </button>
+            )
+          }
+        </div>
+        <div className="spacer"></div>
+        <div className='time'>
+          {
+            type === 'time' &&
+            timesArray.map(el => 
+              <button
+                type='button' 
+                className={classNames('textButton',{
+                  'active': el === time
+                })}
+                key={el}
+                onClick={() => changeTime(el)}
+              >
+                {el}
+              </button>
+            )
+          }
+        </div>
+        <div className='wordCount'>
+          {
+            type === 'words' &&
+            wordsArray.map(el => 
+              <button
+                type='button' 
+                className={classNames('textButton',{
+                  'active': el === words
+                })}
+                key={el}
+                onClick={() => changeWords(el)}
+              >
+                {el}
+              </button>
+            )
+          }
+        </div>
       </div>
     </div>
   )

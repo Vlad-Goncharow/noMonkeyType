@@ -33,6 +33,9 @@
 @import './light.scss';
 @import './dark.scss';
 @import './variables.scss';
+@import './baloon.scss';
+@import './gameSettings.scss';
+// @import './thems/thems.scss';
 
 * {
   padding: 0;
@@ -42,115 +45,131 @@
   text-decoration: none;
   font-family: TypeMates, sans-serif !important;
   text-decoration: none;
-  color: #000;
-  transition:
-    opacity 0.2s ease-in-out,
-    color 0.2s ease-in-out,
-    text-decoration 0.2s ease-in-out,
-    background-color 0.2s ease-in-out,
-    -webkit-text-decoration 0.2s ease-in-out;
-}
-
-a:hover {
-  color: var(--horizon);
 }
 
 body {
-  overflow-y: scroll;
-  background: var(--seashell);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--text-color);
+  overflow-x: hidden;
+  background: var(--bg-color);
 }
 
-[data-theme='dark'] {
-  --romance: var(--bunker);
-  --seashell: var(--cod-gray);
-  --mine-shaft: var(--alto);
-  --limed-spruce: var(--woodsmoke);
-  --horizon: var(--deepsky-blue);
-  --rolling-stone: var(--shady-lady);
-  --mountain-mist: var(--shady-lady);
-  --asphalt-rgb: var(--romance-dark-rgb);
-  --solitude: var(--elephant);
-  --gossip: var(--waiouru);
-  --aqua-haze: var(--firefly);
-  --gull-gray-rgb: var(--ironside-gray-rgb);
+:root {
+  --bg-color: #323437;
+  --main-color: #e2b714;
+  --caret-color: #e2b714;
+  --sub-color: #646669;
+  --sub-alt-color: #2c2e31;
+  --text-color: #d1d0c5;
+  --error-color: #ca4754;
+  --error-extra-color: #7e2a33;
+  --colorful-error-color: #ca4754;
+  --colorful-error-extra-color: #7e2a33;
 }
 
-.page {
-  @media (min-width: 768px) {
-    min-height: calc(100vh);
+#app {
+  min-height: 100vh;
+  grid-template-rows: [top-start] auto [content-start] 1fr [content-end] auto [top-end];
+  overflow: hidden;
+  row-gap: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  width: 100%;
+}
+
+
+
+.content-grid {
+  --padding-inline: 2rem;
+  --content-max-width: 1536px;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: [full-width-start] minmax(0, var(--padding-inline)) [full-width-padding-start] minmax(0, 1fr) [content-start] min(100% - var(--padding-inline)* 2, var(--content-max-width)) [content-end] minmax(0, 1fr) [full-width-padding-end] minmax(0, var(--padding-inline)) [full-width-end];
+}
+
+@media only screen and (max-width: calc(1536px + 5rem)) {
+  .content-grid {
+    --content-max-width: 1280px;
   }
+}
 
-  @media (min-width: 1024px) {
-    min-height: calc(100vh - 120px);
-    margin-top: 15px;
+@media only screen and (max-width: calc(1280px + 5rem)) {
+  .content-grid {
+    --content-max-width: 1024px;
   }
 }
 
-.container {
-  padding: 0 15px;
-  max-width: 1200px;
-  margin: 0 auto;
+.content-grid>.full-width {
+  grid-column: full-width;
+}
+
+header{
+  grid-template-areas: "logo menu";
+  line-height: 2.3rem;
+  font-size: 2.3rem;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: auto 1fr;
+  z-index: 2;
+  align-items: center;
+  gap: .5rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+nav {
+  font-size: 1rem;
+  line-height: 1rem;
+  color: var(--sub-color);
+  display: grid;
+  grid-auto-flow: column;
+  gap: .5rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  width: 100%;
+  grid-template-columns: auto auto auto 1fr auto;
+}
+
+.content-grid>:not(.breakout, .full-width, .full-width-padding) {
+  grid-column: content;
+}
+
+footer {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: inherit;
-
-  @media (max-width: 1024px) {
-    max-width: 768px;
-  }
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 0;
-  }
+  text-align: center;
+  line-height: 1rem;
+  font-size: .75rem;
+  color: var(--sub-color);
 }
 
-.sidebar {
-  flex: 1 1;
 
-  &__header {
-    padding: 10px;
-    border-bottom: 1px solid var(--mountain-mist);
-    margin-bottom: 15px;
-  }
 
-  &__title {
-    letter-spacing: 0.0625rem;
-    font-size: 16px;
-    color: var(--rolling-stone);
-  }
+
+
+.pageTest {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
 }
 
-//for page when left side and sidebar
-.wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-
-  &__left {
-    flex: 1;
-    margin-right: 16px;
-    max-width: calc(100% - 320px);
-    min-width: calc(100% - 320px);
-
-    @media (max-width: 1024px) {
-      max-width: 100%;
-      min-width: 100%;
-      margin-right: 0;
-    }
-  }
+.icon{
+  width: 1.25em;
+  height: 1.25em;
+  display: grid;
+  place-content: center center;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 100;
-  background: rgba(0, 0, 0, 0.2);
-  transition:
-    transform 0.3s,
-    opacity 0.3s;
-  display: flex;
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }

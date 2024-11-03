@@ -37,12 +37,22 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
 
       setTypedCorrectWords((prev:any) => [...prev, showedWordsArray[0]])
       setShowedWordsArray((prev:any) => prev.slice(1))
+
+      if(typedWord.length < showedWordsArray[0].length){
+        gameResults.current = {
+          ...gameResults.current,
+          mised:gameResults.current.mised + (showedWordsArray[0].length - typedWord.length)
+        }
+        dispatch(GameResultsActions.updateMised(gameResults.current.mised))
+      }
     }
   },[typedWord])
 
   const gameResults = React.useRef<any>({
     typedCharacters: 0,
     typedCorrectCharacters: 0,
+    extra:0,
+    mised:0
   })
 
   const [errors, setErrors] = React.useState(0)
@@ -55,11 +65,14 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
       const raw = Math.round(((gameResults.current.typedCharacters || 0) / 5) / (timeElapsed / 60));
       const currentErrors = errors
 
+      dispatch(GameResultsActions.updateSecondStats({ errors: currentErrors, wpm, raw, second:timeElapsed }))
+      
       dispatch(GameResultsActions.updateResults({
-        secondStats: { errors: currentErrors, wpm, raw, second:timeElapsed },
-        typedCharacters: gameResults.current.typedCharacters,
-        typedCorrectCharacters: gameResults.current.typedCorrectCharacters,
-        time:timeElapsed
+        time:timeElapsed,
+        mised:gameResults.current.mised,
+        extra:gameResults.current.extra,
+        typedCharacters:gameResults.current.typedCharacters,
+        typedCorrectCharacters:gameResults.current.typedCorrectCharacters,
       }))
       setErrors(0)
     }
@@ -78,6 +91,7 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
       dispatch(GameSettingsActions.changeIsGameIsStarded(true))
       
       gameResults.current = {
+        ...gameResults.current,
         typedCharacters: (gameResults.current.typedCharacters || 0) + 1,
         typedCorrectCharacters:gameResults.current.typedCorrectCharacters + (e.key === showedWordsArray[0][typedLetterIndex] ? 1 : 0),
       }
@@ -113,6 +127,17 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
     }
   }
   
+  React.useEffect(() => {
+    if(typedWord.length > showedWordsArray[0].length){
+      
+      gameResults.current = {
+        ...gameResults.current,
+        extra:gameResults.current.extra + 1
+      }
+
+      dispatch(GameResultsActions.updateExtra(gameResults.current.extra))
+    }
+  },[showedWordsArray, typedWord.length])
 
   React.useEffect(() => {
     document.addEventListener('keydown',myKeyDown)
@@ -140,7 +165,7 @@ const Game:React.FC<GameTypes> = ({gameWords}) => {
   
   return (
     <div 
-      className='flex flex-wrap items-center mt-10'
+      className={classNames(s.words, 'full-width')}
     >
       {
         typedCorrectWords.map((wordEl: any, wordI: any) => 

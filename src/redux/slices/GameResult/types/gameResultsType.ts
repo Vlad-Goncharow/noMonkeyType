@@ -3,6 +3,8 @@ export interface gameResultsType {
   typedCharacters?:number
   typedCorrectCharacters?:number
   time?:number
+  extra?:number
+  mised?:number
 }
 
 export interface secondStatsType{

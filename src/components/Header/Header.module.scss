@@ -1,0 +1,30 @@
+.logo{
+  display: flex;
+  align-items: center;
+
+  &__icon{
+    width: 2.5rem;
+    display: grid;
+    align-items: center;
+    background-color: transparent;
+    margin-right: 6px;
+
+    svg {
+      fill: var(--main-color);
+    }
+  }
+
+  h1{
+    color: var(--text-color);
+    position: relative;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-family: Lexend Deca,
+    sans-serif;
+    transition: color .25s;
+    font-weight: unset;
+    margin-block-start: unset;
+    margin-block-end: unset;
+    margin-top: -.23em;
+  }
+}

@@ -1,8 +1,18 @@
+.words{
+  font-size: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-content: flex-start;
+}
+
 .word{
   display: flex;
   align-items: center;
   position: relative;
-  margin-right: 5px;
+  margin: .25em .3em;
+  font-size: 1em;
+  line-height: 1em;
 
   &_wrong{
     &::after{
@@ -20,20 +30,19 @@
 }
 
 .letter{
-  font-size: 22px;
+  color: var(--untyped-letter-color);
   position: relative;
-  margin: 0 0.5px;
 
   &__defautl{
-    color:#d4d4d4;
+    color:var(--text-color);
   }
 
   &__correct{
-    color:#09090b;
+    color:var(--sub-color)
   }
 
   &__wrong{
-    color:red;
+    color:var(--error-color);
   }
 
   &__needed{

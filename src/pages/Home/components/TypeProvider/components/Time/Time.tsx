@@ -3,6 +3,7 @@ import { useAppSelector } from '../../../../../../hooks/useAppSelector'
 import { getGameData } from '../../../../../../redux/slices/GameSettings/selectors'
 import { useAppDispatch } from '../../../../../../hooks/useAppDispatch'
 import { GameSettingsActions } from '../../../../../../redux/slices/GameSettings'
+import s from './Time.module.scss'
 
 function Time() {
   const dispatch = useAppDispatch()
@@ -35,7 +36,7 @@ function Time() {
   },[time, timeElapsed])
 
   return (
-    <div>{timeElapsed} / {time}</div>
+    <div className={s.time}>{timeElapsed} / {time}</div>
   )
 }
 
