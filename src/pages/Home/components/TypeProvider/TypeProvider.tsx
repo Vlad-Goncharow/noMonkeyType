@@ -1,21 +1,29 @@
 import React from 'react'
-import Time from './components/Time/Time'
-import Words from './components/Words/Words'
+import { useAppSelector } from '../../../../hooks/useAppSelector'
+import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
+import s from './TypeProvider.module.scss'
+import classNames from 'classnames'
+import { getTestState } from '../../../../redux/slices/TestState/selectors'
+import TypeWrapper from '../TypeWrapper/TypeWrapper'
 
 interface TypeProviderProps{
-  type:'time' | 'words'
+  children:any
 }
 
-const TypeProvider:React.FC<TypeProviderProps> = ({type}):any => {
+const TypeProvider:React.FC<TypeProviderProps> = ({children}) => {
+  const {type} = useAppSelector(getTestConfig)
+  const {isGameEnded,isGameStarted} = useAppSelector(getTestState)
 
-  if(type === 'time'){
-    return <Time />
-  }
-
-  if(type === 'words'){
-    return <Words />
-  }
+  return (
+    <div className={classNames(s.wrapper,{
+      'hidden':isGameEnded && !isGameStarted
+    })}>
+      <div>
+        <TypeWrapper type={type} />
+      </div>
+      {children}
+    </div>
+  )
 }
-
 
 export default TypeProvider

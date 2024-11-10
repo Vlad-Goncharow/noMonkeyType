@@ -1,10 +1,10 @@
-export interface gameResultsType {
+export interface TestResultsType {
   secondStats:secondStatsType[] | []
-  typedCharacters?:number
-  typedCorrectCharacters?:number
-  time?:number
-  extra?:number
-  mised?:number
+  typedCharacters:number
+  typedCorrectCharacters:number
+  time:number
+  extra:number
+  missed:number
 }
 
 export interface secondStatsType{

@@ -1,27 +1,29 @@
 import React from 'react'
-import s from './GameSettings.module.scss'
+import s from './TestSettings.module.scss'
 import { useAppSelector } from '../../hooks/useAppSelector'
-import { getGameData } from '../../redux/slices/GameSettings/selectors'
+import { getTestConfig } from '../../redux/slices/TestConfig/selectors'
 import { timesArray, typesArray, wordsArray } from '../../config/GameConfig'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { GameSettingsActions } from '../../redux/slices/GameSettings'
+import { TestConfigActions } from '../../redux/slices/TestConfig'
 import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { getTestState } from '../../redux/slices/TestState/selectors'
 
 function GameSettings() {
   const dispatch = useAppDispatch()
-  const {type, time, words,isGameEnded,isGameStarted} = useAppSelector(getGameData)
+  const {type, time, words} = useAppSelector(getTestConfig)
+  const {isGameEnded,isGameStarted} = useAppSelector(getTestState)
 
   const changeType = (type: 'time' | 'words') => {
-    dispatch(GameSettingsActions.changeType(type))
+    dispatch(TestConfigActions.changeType(type))
   }
 
   const changeTime = (time: 15 | 30 | 60 | 120) => {
-    dispatch(GameSettingsActions.changeTime(time))
+    dispatch(TestConfigActions.changeTime(time))
   }
 
   const changeWords = (words: 20 | 40 | 60 | 100) => {
-    dispatch(GameSettingsActions.changeWords(words))
+    dispatch(TestConfigActions.changeWords(words))
   }
   
   return (

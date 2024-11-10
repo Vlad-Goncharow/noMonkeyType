@@ -1,17 +1,19 @@
-import React from 'react'
+import classNames from 'classnames'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { getGameResultData } from '../../../../redux/slices/GameResult/selectors'
+import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
 import ChartResults from './components/ChartResults/ChartResults'
+import Controls from './components/Controls/Controls'
 import s from './Results.module.scss'
-import classNames from 'classnames'
-import { getGameData } from '../../../../redux/slices/GameSettings/selectors'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAlignLeft, faAngleRight, faArrowsRotate, faBackward, faImage, faTriangleExclamation } from '@fortawesome/free-solid-svg-icons'
+import React from 'react'
+import { TestContext } from '../../../../providers/TestProvider'
+import { getTestState } from '../../../../redux/slices/TestState/selectors'
 
 function Results() {
-  const {isGameEnded,isGameStarted} = useAppSelector(getGameData)
-  const {secondStats,time,extra,typedCharacters,typedCorrectCharacters,mised} = useAppSelector(getGameResultData)
-  const {type} = useAppSelector(getGameData)
+  const {type} = useAppSelector(getTestConfig)
+  const {isGameEnded,isGameStarted,} = useAppSelector(getTestState)
+  const {secondStats,time,extra,typedCharacters,typedCorrectCharacters,missed} = useAppSelector(getGameResultData)
+  const {isRepeated} = React.useContext(TestContext)
 
   const wpmValues = secondStats.map((stat) => stat.wpm);  
   const rawValues = secondStats.map((stat) => stat.raw);  
@@ -23,36 +25,32 @@ function Results() {
   const rawWpmStdDev = Math.sqrt(rawWpmVariance);
 
   const consistency = 100 - (rawWpmStdDev / avarageRaw) * 100;
-  console.log(isGameStarted,isGameEnded);
   
   return (
     <div className={classNames('content-grid full-width',{
       'hidden':(!isGameStarted && !isGameEnded) || (isGameStarted && !isGameEnded)
     })}>
       <div className={s.wrapper}>
-          <div className={s.stats}>
-          <div className={classNames(s.grop, s.wpm)}>
-            <div className={s.top}>wpm</div>
-            <div 
-              aria-label={`${Math.round(averageWPM)} wpm`} 
-              data-balloon-break data-balloon-pos="up" 
-              className={s.bottom}
-            >
-              {Math.round(averageWPM)}
-            </div>
+        <div className={s.stats}>
+        <div className={classNames(s.grop, s.wpm)}>
+          <div className={s.top}>wpm</div>
+          <div 
+            aria-label={`${Math.round(averageWPM)} wpm`} 
+            data-balloon-break data-balloon-pos="up" 
+            className={s.bottom}
+          >
+            {Math.round(averageWPM)}
           </div>
-          <div className={classNames(s.grop, s.acc)}>
-            <div className={s.top}>acc</div>
-            {
-              typedCorrectCharacters && typedCharacters &&
-              <div 
-                aria-label={`${Math.round((typedCorrectCharacters / typedCharacters) * 100)}% accuracy`} 
-                data-balloon-break data-balloon-pos="up" 
-                className={s.bottom}
-              >
-                {Math.round((typedCorrectCharacters / typedCharacters) * 100)}%
-              </div>
-            }
+        </div>
+        <div className={classNames(s.grop, s.acc)}>
+          <div className={s.top}>acc</div>
+          <div 
+            aria-label={`${Math.round((typedCorrectCharacters / typedCharacters) * 100)}% accuracy`} 
+            data-balloon-break data-balloon-pos="up" 
+            className={s.bottom}
+          >
+            {Math.round((typedCorrectCharacters / typedCharacters) * 100)}%
+          </div>
           </div>
         </div>
         <div className={classNames(s.stats, s.morestats)}>
@@ -64,14 +62,18 @@ function Results() {
               {type}
             </div>
           </div>
-          <div className={classNames(s.group, s.info)}>
-            <div className={s.top}>
-              other
+          {
+            isRepeated &&
+            <div className={classNames(s.group, s.info)}>
+              <div className={s.top}>
+                other
+              </div>
+              <div className={s.bottom}>
+                repeat
+              </div>
             </div>
-            <div className={s.bottom}>
-              hz
-            </div>
-          </div>
+          }
+          
           <div className={classNames(s.group, s.raw)}>
             <div className={s.top}>
               raw
@@ -94,8 +96,7 @@ function Results() {
               className={s.bottom}
             >
               {
-                typedCharacters && typedCorrectCharacters &&
-                typedCorrectCharacters + '/' + (typedCharacters - typedCorrectCharacters) + '/' + extra + '/' + mised
+                typedCorrectCharacters + '/' + (typedCharacters - typedCorrectCharacters) + '/' + extra + '/' + missed
               }
             </div>
           </div>
@@ -128,26 +129,7 @@ function Results() {
           <ChartResults />
         </div>
         <div className={s.bottom}>
-          <div className={s.buttons}>
-            <button className={s.text} id="nextTestButton" aria-label="Next test" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faAngleRight} style={{}} />
-            </button>
-            <button className={s.text} id="restartTestButtonWithSameWordset" aria-label="Repeat test" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faArrowsRotate} />
-            </button>
-            <button className={s.text} id="practiseWordsButton" aria-label="Practice words" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faTriangleExclamation} />
-            </button>
-            <button className={s.text} id="showWordHistoryButton" aria-label="Toggle words history" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faAlignLeft} />
-            </button>
-            <button className={s.text} id="watchReplayButton" aria-label="Watch replay" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faBackward} />
-            </button>
-            <button className={s.text} id="saveScreenshotButton" aria-label="Copy screenshot to clipboard" role="button" data-balloon-pos="down">
-              <FontAwesomeIcon icon={faImage} />
-            </button>
-          </div>
+          <Controls />
         </div>
       </div>
     </div>

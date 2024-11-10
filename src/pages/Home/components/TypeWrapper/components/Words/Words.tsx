@@ -1,9 +1,9 @@
 import React from 'react'
 import { useAppSelector } from '../../../../../../hooks/useAppSelector'
-import { getGameData } from '../../../../../../redux/slices/GameSettings/selectors'
+import { getTestConfig } from '../../../../../../redux/slices/TestConfig/selectors'
 
 function Words() {
-  const {words} = useAppSelector(getGameData)
+  const {words} = useAppSelector(getTestConfig)
   
   return (
     <div>{words}</div>

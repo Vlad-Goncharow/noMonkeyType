@@ -28,6 +28,7 @@ const ChartResults = () => {
         borderWidth: 2,
         pointRadius: 3,
         yAxisID: 'yWPM',
+        order:2,
       },
       {
         label: 'raw',
@@ -37,6 +38,7 @@ const ChartResults = () => {
         borderWidth: 2,
         pointRadius: 3,
         yAxisID: 'yWPM',
+        order:3,
       },
       {
         label: 'errors',
@@ -44,11 +46,12 @@ const ChartResults = () => {
         pointStyle: 'star',
         backgroundColor:'red',
         borderColor:'red',
-        pointRadius: 3,
+        pointRadius: 5, 
         showLine: false,
         yAxisID: 'yErrors',
         skipNull: true,
-      },
+        order: 1, 
+      }
     ],
   };
 

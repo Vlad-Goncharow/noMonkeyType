@@ -1,20 +1,24 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { gameResultsType } from './types/gameResultsType'
+import { createSlice } from '@reduxjs/toolkit'
+import { TestResultsType } from './types/gameResultsType'
 
-const initialState: gameResultsType = {
-  secondStats:[]
+const initialState: TestResultsType = {
+  secondStats:[],
+  extra:0,
+  missed:0,
+  time:0,
+  typedCharacters:0,
+  typedCorrectCharacters:0,
 }
 
-const gameResultsSlice = createSlice({
-  name: 'gameResults',
+const TestResultsSlice = createSlice({
+  name: 'testResults',
   initialState,
   reducers: {
     updateResults(state, action){
       state.typedCharacters = action.payload.typedCharacters
       state.typedCorrectCharacters = action.payload.typedCorrectCharacters
-      state.time = action.payload.time
       state.extra = action.payload.extra
-      state.mised = action.payload.mised
+      state.missed = action.payload.missed
     },
     updateSecondStats(state, action){
       state.secondStats = [...state.secondStats, action.payload]
@@ -33,10 +37,18 @@ const gameResultsSlice = createSlice({
       state.time = action.payload
     },
     updateMised(state, action){
-      state.mised = action.payload
+      state.missed = action.payload
     },
+    clearAll(state){
+      state.extra = 0
+      state.missed = 0
+      state.secondStats = []
+      state.time = 0
+      state.typedCharacters = 0
+      state.typedCorrectCharacters = 0
+    }
   },
 })
 
-export const { actions: GameResultsActions } = gameResultsSlice
-export const { reducer: GameResultsReducer } = gameResultsSlice
+export const { actions: TestResultsActions } = TestResultsSlice
+export const { reducer: TestResultsReducer } = TestResultsSlice
