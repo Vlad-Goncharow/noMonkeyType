@@ -25,6 +25,7 @@ interface ITestContext {
   listenSpace?: (e: KeyboardEvent) => void;
   newGame?:() => void
   repeat?:() => void
+  clearAll?:() => void
   setTimeElapsed?:any
 }
 
@@ -49,7 +50,7 @@ interface ITestProvider {
 }
 
 export const TestProvider:React.FC<ITestProvider> = ({children}) => {
-  const {time} = useAppSelector(getTestConfig)
+  const {time, type, words} = useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
   const {isGameStarted,isGameEnded,wordsList} = useAppSelector(getTestState)
 
@@ -110,16 +111,16 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
 
       if(typedWord.length === 0 && typedWords.length > 0 && lastTypedWordStr !== lastTypedCorrectStr){
         setShowedWordsArray((prev:any) => [typedCorrectWords[typedCorrectWords.length - 1], ...prev])
+        setTypedWord(typedWords[typedWords.length - 1])
         setTypedCorrectWords((prev:any) => prev.slice(0, prev.length - 1))
 
-        setTypedWord((prev:any) => prev[prev.length - 1])
         setTypedLetterIndex(typedWords[typedWords.length - 1].length)
         setTypedWords((prev:any) => prev.slice(0, prev.length - 1))
       }
     }
     
     //prevent user wrote all available words
-    if(typedWords.length === typedCorrectWords.length && showedWordsArray.length === 1){
+    if(typedWords.length === typedCorrectWords.length && showedWordsArray.length === 1 && type !== 'words'){
       let str = generateText(40, false).split(' ')
       dispatch(testStateActions.setWordsList([...typedCorrectWords,...showedWordsArray, ...str]))
     }
@@ -172,7 +173,7 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
     dispatch(testStateActions.changeIsGameIsStarded(false))
     dispatch(testStateActions.changeIsGameIsEnded(false))
     clearAll()
-    dispatch(testStateActions.setWordsList(generateText(40, false).split(' ')))
+    dispatch(testStateActions.setWordsList(generateText(words && type === 'words' ? words : 40, false).split(' ')))
     setIsRepeated(false)
   }
 
@@ -217,7 +218,8 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
         listenSpace,
         setTimeElapsed,
         newGame,
-        repeat
+        repeat,
+        clearAll
       }}
     >
       {children}

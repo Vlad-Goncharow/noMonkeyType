@@ -16,4 +16,4 @@ export const typesArray:typesArrayObjectType[] = [
   }
 ];
 export const timesArray: Array<15 | 30 | 60 | 120> = [15,30,60,120]
-export const wordsArray: Array<20 | 40 | 60 | 100> = [20,40,60,100]
+export const wordsArray: Array<10 | 25 | 50 | 100> = [10,25,50,100]

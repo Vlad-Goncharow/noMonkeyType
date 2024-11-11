@@ -8,21 +8,27 @@ import { TestConfigActions } from '../../redux/slices/TestConfig'
 import classNames from 'classnames'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getTestState } from '../../redux/slices/TestState/selectors'
+import { testStateActions } from '../../redux/slices/TestState'
+import { TestContext } from '../../providers/TestProvider'
 
 function GameSettings() {
   const dispatch = useAppDispatch()
   const {type, time, words} = useAppSelector(getTestConfig)
   const {isGameEnded,isGameStarted} = useAppSelector(getTestState)
+  const {clearAll} = React.useContext(TestContext)
 
   const changeType = (type: 'time' | 'words') => {
     dispatch(TestConfigActions.changeType(type))
+    dispatch(testStateActions.changeIsActive(false))
+    dispatch(testStateActions.changeIsGameIsStarded(false))
+    if(clearAll) clearAll()
   }
 
   const changeTime = (time: 15 | 30 | 60 | 120) => {
     dispatch(TestConfigActions.changeTime(time))
   }
-
-  const changeWords = (words: 20 | 40 | 60 | 100) => {
+  
+  const changeWords = (words: 10 | 25 | 50 | 100) => {
     dispatch(TestConfigActions.changeWords(words))
   }
   

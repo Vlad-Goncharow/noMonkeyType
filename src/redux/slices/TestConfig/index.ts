@@ -22,7 +22,7 @@ const TestConfigSlice = createSlice({
         state.time = 15
         state.words = undefined; 
       } else {
-        state.words = 20
+        state.words = 10
         state.time = undefined;
       }
     },
@@ -30,7 +30,7 @@ const TestConfigSlice = createSlice({
       state.time = action.payload;
       state.words = undefined; 
     },
-    changeWords(state, action: PayloadAction<20 | 40 | 60 | 100>) {
+    changeWords(state, action: PayloadAction<10 | 25 | 50 | 100>) {
       state.words = action.payload;
       state.time = undefined;
     },
