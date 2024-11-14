@@ -5,12 +5,12 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { useAppSelector } from '../../../../../../hooks/useAppSelector';
-import { getGameResultData } from '../../../../../../redux/slices/GameResult/selectors';
+import { getTestResultData } from '../../../../../../redux/slices/TestResult/selectors';
 
 ChartJS.register(...registerables);
 
 const ChartResults = () => {
-  const { secondStats } = useAppSelector(getGameResultData);
+  const { secondStats } = useAppSelector(getTestResultData);
 
   const labels = secondStats.map((stat) => stat.second);
   const wpmData = secondStats.map((stat) => stat.wpm);

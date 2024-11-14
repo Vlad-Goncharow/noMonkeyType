@@ -18,14 +18,14 @@ const Test:React.FC = () => {
   const typedWordIndex = 0
 
   React.useEffect(() => {
-  if (myKeyDown) document.addEventListener('keydown', myKeyDown);
-  if (listenSpace) document.addEventListener('keyup', listenSpace);
+    if (myKeyDown) document.addEventListener('keydown', myKeyDown);
+    if (listenSpace) document.addEventListener('keyup', listenSpace);
 
-  return () => {
-    if (myKeyDown) document.removeEventListener('keydown', myKeyDown);
-    if (listenSpace) document.removeEventListener('keyup', listenSpace);
-  };
-}, [myKeyDown, listenSpace]);
+    return () => {
+      if (myKeyDown) document.removeEventListener('keydown', myKeyDown);
+      if (listenSpace) document.removeEventListener('keyup', listenSpace);
+    };
+  }, [myKeyDown, listenSpace]);
 
 
   return (

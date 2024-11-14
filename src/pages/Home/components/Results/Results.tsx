@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { getGameResultData } from '../../../../redux/slices/GameResult/selectors'
+import { getTestResultData } from '../../../../redux/slices/TestResult/selectors'
 import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
 import ChartResults from './components/ChartResults/ChartResults'
 import Controls from './components/Controls/Controls'
@@ -12,9 +12,10 @@ import { getTestState } from '../../../../redux/slices/TestState/selectors'
 function Results() {
   const {type} = useAppSelector(getTestConfig)
   const {isGameEnded,isGameStarted,} = useAppSelector(getTestState)
-  const {secondStats,time,extra,typedCharacters,typedCorrectCharacters,missed} = useAppSelector(getGameResultData)
+  const {secondStats,time,extra,typedCharacters,typedCorrectCharacters,missed,incorrect} = useAppSelector(getTestResultData)
+  
   const {isRepeated} = React.useContext(TestContext)
-
+  
   const wpmValues = secondStats.map((stat) => stat.wpm);  
   const rawValues = secondStats.map((stat) => stat.raw);  
 
@@ -96,7 +97,7 @@ function Results() {
               className={s.bottom}
             >
               {
-                typedCorrectCharacters + '/' + (typedCharacters - typedCorrectCharacters) + '/' + extra + '/' + missed
+                typedCorrectCharacters + '/' + incorrect + '/' + extra + '/' + missed
               }
             </div>
           </div>

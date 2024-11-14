@@ -5,6 +5,7 @@ export interface TestResultsType {
   time:number
   extra:number
   missed:number
+  incorrect:number
 }
 
 export interface secondStatsType{

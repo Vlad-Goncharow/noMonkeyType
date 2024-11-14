@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { TestResultsType } from './types/gameResultsType'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { TestResultsType } from './types/testResultsType'
 
 const initialState: TestResultsType = {
   secondStats:[],
@@ -8,6 +8,7 @@ const initialState: TestResultsType = {
   time:0,
   typedCharacters:0,
   typedCorrectCharacters:0,
+  incorrect:0,
 }
 
 const TestResultsSlice = createSlice({
@@ -24,20 +25,23 @@ const TestResultsSlice = createSlice({
       state.secondStats = [...state.secondStats, action.payload]
     },
     
-    updateTypedCharacters(state, action){
-      state.typedCharacters = action.payload
+    updateTypedCharacters(state){
+      state.typedCharacters = state.typedCharacters + 1
     },
-    updateTypedCorrectCharacters(state, action){
-      state.typedCorrectCharacters = action.payload
+    updateTypedCorrectCharacters(state){
+      state.typedCorrectCharacters = state.typedCorrectCharacters + 1
     },
-    updateExtra(state, action){
-      state.extra = action.payload
+    updateExtra(state){
+      state.extra = state.extra + 1
     },
     updateTime(state, action){
       state.time = action.payload
     },
-    updateMised(state, action){
-      state.missed = action.payload
+    updateMised(state){
+      state.missed = state.missed + 1
+    },
+    updateIncorrect(state,action:PayloadAction<number>){
+      state.incorrect = action.payload
     },
     clearAll(state){
       state.extra = 0
@@ -46,6 +50,7 @@ const TestResultsSlice = createSlice({
       state.time = 0
       state.typedCharacters = 0
       state.typedCorrectCharacters = 0
+      state.incorrect = 0
     }
   },
 })

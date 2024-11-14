@@ -3,20 +3,17 @@ import { createContext } from 'react'
 import { useAppSelector } from '../hooks/useAppSelector';
 import { getTestState } from '../redux/slices/TestState/selectors';
 import { useAppDispatch } from '../hooks/useAppDispatch';
-import { TestResultsActions } from '../redux/slices/GameResult';
+import { TestResultsActions } from '../redux/slices/TestResult';
 import { getTestConfig } from '../redux/slices/TestConfig/selectors';
 import { testStateActions } from '../redux/slices/TestState';
 import { generateText } from '../utils/wordsGenerator';
+import { getTestResultData } from '../redux/slices/TestResult/selectors';
 
 interface ITestContext {
   typedLetterIndex: number;
   typedWords: string[][];
   typedWord: string[];
   typedCorrectWords: string[];
-  typedCharacters: number;
-  typedCorrectCharacters: number;
-  extra: number;
-  missed: number;
   timeElapsed: number;
   isRepeated: boolean;
   showedWordsArray:any,
@@ -26,7 +23,6 @@ interface ITestContext {
   newGame?:() => void
   repeat?:() => void
   clearAll?:() => void
-  setTimeElapsed?:any
 }
 
 const defaultValue: ITestContext = {
@@ -34,10 +30,6 @@ const defaultValue: ITestContext = {
   typedWords: [],
   typedWord: [],
   typedCorrectWords: [],
-  typedCharacters: 0,
-  typedCorrectCharacters: 0,
-  extra: 0,
-  missed: 0,
   timeElapsed:0,
   showedWordsArray:[],
   isRepeated:false
@@ -53,18 +45,43 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
   const {time, type, words} = useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
   const {isGameStarted,isGameEnded,wordsList} = useAppSelector(getTestState)
+  const {typedCharacters,typedCorrectCharacters} = useAppSelector(getTestResultData)
 
   const [typedLetterIndex,setTypedLetterIndex] = React.useState<number>(0)
   const [showedWordsArray, setShowedWordsArray] = React.useState<any>(wordsList)
   const [typedWord, setTypedWord] = React.useState<any>([])
   const [typedWords, setTypedWords] = React.useState<any>([])
   const [typedCorrectWords, setTypedCorrectWords] = React.useState<any>([])
-  const [typedCharacters, setTypedCharacters] = React.useState<number>(0)
-  const [typedCorrectCharacters, setTypedCorrectCharacters] = React.useState<number>(0)
   const [errors, setErrors] = React.useState<number>(0)
-  const [missed, setMissed] = React.useState<number>(0)
   const [timeElapsed, setTimeElapsed] = React.useState<number>(0)
   const [isRepeated, setIsRepeated] = React.useState<boolean>(false)
+
+  React.useEffect(() => {
+    const countLetterErrors = ():number => {
+      let errors = 0;
+
+      typedCorrectWords.forEach((word:any, wordI:any) => {
+        word.split('').slice(0, typedWords[wordI].length).forEach((letter:any, letterI:any) => {
+          if(letter !== typedWords[wordI][letterI]){
+            errors += 1
+          }
+        })
+      })
+
+      if(showedWordsArray.length > 0){
+        typedWord.forEach((letter:any, i:any) => {
+          if(letter !== showedWordsArray[0].split('').slice(0, typedWord.length)[i] && i < showedWordsArray[0].length){
+            errors += 1
+          }
+        })
+      }
+      
+
+      return errors;
+    };
+
+    dispatch(TestResultsActions.updateIncorrect(countLetterErrors()))
+  },[typedWords, typedCorrectWords, typedWord, showedWordsArray])
 
   React.useEffect(() => {
     if(typedCorrectWords.length > 0){
@@ -88,8 +105,10 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
     }
     
     if(e.key !== ' ' && isLetterOrNumber && showedWordsArray) {
-      setTypedCharacters(prev => prev + 1)
-      setTypedCorrectCharacters((prev) => prev + (e.key === showedWordsArray[0][typedLetterIndex] ? 1 : 0))
+      dispatch(TestResultsActions.updateTypedCharacters())
+      if(e.key === showedWordsArray[0][typedLetterIndex]){
+        dispatch(TestResultsActions.updateTypedCorrectCharacters())
+      }
       
       if(e.key !== showedWordsArray[0][typedLetterIndex] && showedWordsArray[0].length > 0){
         setErrors(prev => prev + 1)
@@ -97,6 +116,10 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
       
       setTypedWord((prev:any) => [...prev, e.key]) 
       setTypedLetterIndex((prev:any) => prev + 1)
+
+      if(typedWord.length >= showedWordsArray[0].length){
+        dispatch(TestResultsActions.updateExtra())
+      }
     }
     
 
@@ -148,8 +171,7 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
 
       
       if(typedWord.length < showedWordsArray[0].length){
-        setMissed(prev => prev + (showedWordsArray[0].length - typedWord.length))
-        dispatch(TestResultsActions.updateMised(missed))
+        dispatch(TestResultsActions.updateMised())
       }
 
       setTypedWord([])
@@ -160,10 +182,7 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
     setTypedWord([])
     setTypedWords([])
     setTypedCorrectWords([])
-    setTypedCharacters(0)
-    setTypedCorrectCharacters(0)
     setErrors(0)
-    setMissed(0)
     setTimeElapsed(0)
     setTypedLetterIndex(0)
     dispatch(TestResultsActions.clearAll())
@@ -206,17 +225,12 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
         typedWords,
         typedWord,
         typedCorrectWords,
-        typedCharacters,
-        typedCorrectCharacters,
-        extra: 0,
-        missed,
         timeElapsed,
         showedWordsArray,
         isRepeated,
         myKeyDown,
         calcRes,
         listenSpace,
-        setTimeElapsed,
         newGame,
         repeat,
         clearAll
