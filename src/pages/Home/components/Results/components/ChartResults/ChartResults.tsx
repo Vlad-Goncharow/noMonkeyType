@@ -25,8 +25,8 @@ const ChartResults = () => {
         data: wpmData,
         borderColor: 'yellow',
         backgroundColor: 'yellow',
-        borderWidth: 2,
-        pointRadius: 3,
+        borderWidth: 3,
+        pointRadius: 1,
         yAxisID: 'yWPM',
         order:2,
       },
@@ -35,29 +35,39 @@ const ChartResults = () => {
         data: rawData,
         borderColor: 'gray',
         backgroundColor: 'gray',
-        borderWidth: 2,
-        pointRadius: 3,
+        borderWidth: 3,
+        pointRadius: 1,
         yAxisID: 'yWPM',
         order:3,
       },
       {
         label: 'errors',
         data: errorsData,
-        pointStyle: 'star',
         backgroundColor:'red',
         borderColor:'red',
-        pointRadius: 5, 
         showLine: false,
         yAxisID: 'yErrors',
         skipNull: true,
-        order: 1, 
+        borderWidth: 2,
+        order: 1,
+        pointStyle:'crossRot',
+        pointRadius: function (context:any): number {
+          const index = context.dataIndex;
+          const value = context.dataset.data[index] as number;
+          return (value ?? 0) <= 0 ? 0 : 3;
+        },
+        pointHoverRadius: function (context:any): number {
+          const index = context.dataIndex;
+          const value = context.dataset.data[index] as number;
+          return (value ?? 0) <= 0 ? 0 : 5;
+        },
       }
     ],
   };
 
   const options: ChartOptions<'line'> = {
     responsive: true,
-    maintainAspectRatio:false,
+    maintainAspectRatio: false,
     scales: {
       yWPM: {
         type: 'linear',
@@ -69,6 +79,10 @@ const ChartResults = () => {
         beginAtZero: true,
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
+        },
+        ticks: {
+          autoSkip: true,
+          autoSkipPadding: 20,
         },
       },
       yErrors: {
@@ -88,6 +102,12 @@ const ChartResults = () => {
           callback: (value: any) => value,
         },
       },
+      x: {
+        ticks: {
+          autoSkip: true,
+          autoSkipPadding: 20,
+        },
+      },
     },
     plugins: {
       tooltip: {
@@ -96,16 +116,16 @@ const ChartResults = () => {
         callbacks: {
           title: (tooltipItems) => {
             const index = tooltipItems[0].dataIndex;
-            return `${labels[index]}`; // Показать секунду
+            return `${labels[index]}`;
           },
         },
       },
-      
       legend: {
-        display: false, // Скрыть легенду
+        display: false, 
       },
     },
   };
+
 
   return <Line data={data} options={options} />;
 };

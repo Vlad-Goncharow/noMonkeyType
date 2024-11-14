@@ -2,6 +2,8 @@ import classNames from 'classnames'
 import React, { useContext } from 'react'
 import s from './Test.module.scss'
 import { TestContext } from '../../providers/TestProvider'
+import { useAppSelector } from '../../hooks/useAppSelector'
+import { getTestState } from '../../redux/slices/TestState/selectors'
 
 
 const Test:React.FC = () => {
@@ -15,11 +17,13 @@ const Test:React.FC = () => {
     typedWords,
   } = useContext(TestContext)
 
+  const {isGameEnded} = useAppSelector(getTestState)
+
   const typedWordIndex = 0
 
   React.useEffect(() => {
-    if (myKeyDown) document.addEventListener('keydown', myKeyDown);
-    if (listenSpace) document.addEventListener('keyup', listenSpace);
+    if (myKeyDown && !isGameEnded) document.addEventListener('keydown', myKeyDown);
+    if (listenSpace && !isGameEnded) document.addEventListener('keyup', listenSpace);
 
     return () => {
       if (myKeyDown) document.removeEventListener('keydown', myKeyDown);

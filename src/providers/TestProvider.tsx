@@ -152,14 +152,14 @@ export const TestProvider:React.FC<ITestProvider> = ({children}) => {
   const calcRes = () => {
     if(timeElapsed > 0){
       const wpm = Math.round(((typedCorrectCharacters || 0) / 5) / (timeElapsed / 60));
-      const raw = Math.round(((typedCharacters || 0) / 5) / (timeElapsed / 60));
-      const currentErrors = errors
-
-      dispatch(TestResultsActions.updateSecondStats({ errors: currentErrors, wpm, raw, second:timeElapsed }))
+      const raw = Math.round((((typedCharacters || 0) - (errors || 0)) / 5) / (timeElapsed / 60));
+      
+      dispatch(TestResultsActions.updateSecondStats({ errors: errors, wpm, raw, second: timeElapsed }))
       dispatch(TestResultsActions.updateTime(timeElapsed))
-      setErrors(0)
+      setErrors(0);
     }
-  }
+  };
+
   
   const listenSpace = (e:KeyboardEvent) => {
     if(e.key === ' '  && typedWord.length > 0){
