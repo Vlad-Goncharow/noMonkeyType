@@ -1,4 +1,4 @@
-.words{
+.words {
   font-size: 2rem;
   display: flex;
   flex-wrap: wrap;
@@ -6,17 +6,17 @@
   align-content: flex-start;
 }
 
-.word{
+.word {
   display: flex;
   align-items: center;
   position: relative;
-  margin: .25em .3em;
+  margin: 0.25em 0.3em;
   font-size: 1em;
   line-height: 1em;
 
-  &_wrong{
-    &::after{
-      content:'';
+  &_wrong {
+    &::after {
+      content: '';
       position: absolute;
       bottom: 2px;
       left: 0;
@@ -26,28 +26,27 @@
       background: red;
     }
   }
-
 }
 
-.letter{
+.letter {
   color: var(--untyped-letter-color);
   position: relative;
 
-  &__defautl{
-    color:var(--text-color);
+  &__defautl {
+    color: var(--text-color);
   }
 
-  &__correct{
-    color:var(--sub-color)
+  &__correct {
+    color: var(--sub-color);
   }
 
-  &__wrong{
-    color:var(--error-color);
+  &__wrong {
+    color: var(--error-color);
   }
 
-  &__needed{
-    &:before{
-      content:'';
+  &__needed {
+    &:before {
+      content: '';
       position: absolute;
       top: 50%;
       left: -1px;
@@ -58,7 +57,7 @@
       background: #fbbf24;
     }
 
-    &_right{
+    &_right {
       &:before {
         left: auto;
         right: -1px;

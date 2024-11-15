@@ -2,32 +2,32 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { testStateType } from './types/testStateType'
 
 const initialState: testStateType = {
-  isActive:false,
-  isRepeated:false,
-  wordsList:[],
-  isGameEnded:false,
-  isGameStarted:false
+  isActive: false,
+  isRepeated: false,
+  wordsList: [],
+  isGameEnded: false,
+  isGameStarted: false,
 }
 
 const testStateSlice = createSlice({
   name: 'testState',
   initialState,
   reducers: {
-    changeIsActive(state,action:PayloadAction<boolean>){
+    changeIsActive(state, action: PayloadAction<boolean>) {
       state.isActive = action.payload
     },
-    changeIsRepeated(state,action:PayloadAction<boolean>){
+    changeIsRepeated(state, action: PayloadAction<boolean>) {
       state.isRepeated = action.payload
     },
-    setWordsList(state,action:PayloadAction<string[]>){
+    setWordsList(state, action: PayloadAction<string[]>) {
       state.wordsList = action.payload
     },
-    changeIsGameIsStarded(state, action:PayloadAction<boolean>){
+    changeIsGameIsStarded(state, action: PayloadAction<boolean>) {
       state.isGameStarted = action.payload
     },
-    changeIsGameIsEnded(state, action:PayloadAction<boolean>){
+    changeIsGameIsEnded(state, action: PayloadAction<boolean>) {
       state.isGameEnded = action.payload
-    }
+    },
   },
 })
 

@@ -7,20 +7,22 @@ import { testStateActions } from '../../../../../../redux/slices/TestState'
 import s from './Time.module.scss'
 
 function Time() {
-  const {timeElapsed} = useContext(TestContext)
-  
+  const { timeElapsed } = useContext(TestContext)
+
   const dispatch = useAppDispatch()
-  const {time} = useAppSelector(getTestConfig)
+  const { time } = useAppSelector(getTestConfig)
 
   React.useEffect(() => {
-    if(time === timeElapsed){
+    if (time === timeElapsed) {
       dispatch(testStateActions.changeIsGameIsEnded(true))
       dispatch(testStateActions.changeIsGameIsStarded(false))
     }
-  },[time, timeElapsed])
+  }, [time, timeElapsed])
 
   return (
-    <div className={s.time}>{timeElapsed} / {time}</div>
+    <div className={s.time}>
+      {timeElapsed} / {time}
+    </div>
   )
 }
 

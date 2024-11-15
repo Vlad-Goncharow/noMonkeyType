@@ -6,8 +6,8 @@ import { testStateReducer } from './slices/TestState'
 //I know that exporting to layers below is a violation of fsd principles, but they haven't figured out how to solve it themselves yet
 export const rootReducer = combineReducers({
   testConfig: TestConfigReducer,
-  testResults:TestResultsReducer,
-  testState:testStateReducer
+  testResults: TestResultsReducer,
+  testState: testStateReducer,
 })
 
 const store = configureStore({

@@ -1,5 +1,5 @@
 import React from 'react'
- import { getTestConfig } from '../redux/slices/TestConfig/selectors'
+import { getTestConfig } from '../redux/slices/TestConfig/selectors'
 import { useAppSelector } from './useAppSelector'
 
 function useConfigUpdate() {
@@ -7,7 +7,7 @@ function useConfigUpdate() {
 
   React.useEffect(() => {
     localStorage.setItem('config', JSON.stringify(config))
-  },[config])
+  }, [config])
 }
 
 export default useConfigUpdate

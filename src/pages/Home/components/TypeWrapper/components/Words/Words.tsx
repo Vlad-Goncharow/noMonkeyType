@@ -8,19 +8,17 @@ import s from './Words.module.scss'
 
 function Words() {
   const dispatch = useAppDispatch()
-  const {words} = useAppSelector(getTestConfig)
-  const {typedWords} = React.useContext(TestContext)
+  const { words } = useAppSelector(getTestConfig)
+  const { typedWords } = React.useContext(TestContext)
 
   React.useEffect(() => {
-    if(typedWords.length === words){
+    if (typedWords.length === words) {
       dispatch(testStateActions.changeIsGameIsEnded(true))
       dispatch(testStateActions.changeIsGameIsStarded(false))
     }
-  },[typedWords, words])
-  
-  return (
-    <div className={s.words}>{typedWords.length + '/' + words}</div>
-  )
+  }, [typedWords, words])
+
+  return <div className={s.words}>{typedWords.length + '/' + words}</div>
 }
 
 export default Words

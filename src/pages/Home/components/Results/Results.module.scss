@@ -4,9 +4,9 @@
   align-items: center;
   grid-template-columns: auto 1fr;
   grid-template-areas:
-    "stats chart"
-    "morestats morestats"
-    "bottom bottom";
+    'stats chart'
+    'morestats morestats'
+    'bottom bottom';
   padding: 1rem;
 }
 
@@ -17,8 +17,8 @@
   justify-content: center;
   align-items: center;
   grid-template-areas:
-    "wpm"
-    "acc";
+    'wpm'
+    'acc';
 }
 
 .morestats {
@@ -68,7 +68,8 @@
   grid-area: acc;
 }
 
-.wpm, .acc {
+.wpm,
+.acc {
   .top {
     color: var(--sub-color);
     font-size: 2rem;
@@ -76,7 +77,8 @@
     display: flex;
   }
 }
-.wpm, .acc {
+.wpm,
+.acc {
   .bottom {
     color: var(--main-color);
     font-size: 4rem;
@@ -84,29 +86,29 @@
   }
 }
 
-.group{
-  .top{
+.group {
+  .top {
     color: var(--sub-color);
     font-size: 1rem;
     line-height: 1rem;
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
   }
-  .bottom{
+  .bottom {
     color: var(--main-color);
     font-size: 2rem;
     line-height: 2rem;
   }
 }
 
-.testType, .info{
-  .bottom{
+.testType,
+.info {
+  .bottom {
     font-size: 1rem;
     line-height: 1rem;
   }
 }
 
-
-.chart{
+.chart {
   grid-area: chart;
   width: 100%;
   max-height: 200px;
@@ -118,6 +120,6 @@
   }
 }
 
-.bottom{
+.bottom {
   grid-column: 1 / -1;
 }

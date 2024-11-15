@@ -11,19 +11,23 @@ import TestSettings from '../../components/TestSettings/TestSettings'
 import { TestProvider } from '../../providers/TestProvider'
 
 function Home() {
-  const {words} = useAppSelector(getTestConfig)
+  const { words } = useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
-  
+
   React.useEffect(() => {
-    if(!words){
-      dispatch(testStateActions.setWordsList(generateText(40, false).split(' ')))
+    if (!words) {
+      dispatch(
+        testStateActions.setWordsList(generateText(40, false).split(' '))
+      )
     } else {
-      dispatch(testStateActions.setWordsList(generateText(words, false).split(' ')))
+      dispatch(
+        testStateActions.setWordsList(generateText(words, false).split(' '))
+      )
     }
-  },[words])
+  }, [words])
 
   return (
-    <main className={'full-width content-grid'} style={{height:'100%'}}>
+    <main className={'full-width content-grid'} style={{ height: '100%' }}>
       <div className={'page pageTest full-width content-grid active'}>
         {
           <TestProvider>

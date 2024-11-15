@@ -1,18 +1,19 @@
-.row{
+.row {
   display: flex;
   background: var(--sub-alt-color);
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   align-items: center;
 }
 
-.btn{
+.btn {
   padding: 1em;
   color: var(--sub-color);
   cursor: pointer;
-  transition: background .125s,
-  color .125s,
-  opacity .125s;
-  padding: .5em;
+  transition:
+    background 0.125s,
+    color 0.125s,
+    opacity 0.125s;
+  padding: 0.5em;
   border-radius: var(--roundness);
   background: 0 0;
   text-align: center;
@@ -30,12 +31,12 @@
   font-family: inherit;
   font-size: 1em;
   display: inline-flex;
-  gap: .5em;
+  gap: 0.5em;
   align-items: center;
   justify-content: center;
   font-weight: 500;
 
-  &_active{
+  &_active {
     color: var(--main-color);
     background: 0 0;
   }

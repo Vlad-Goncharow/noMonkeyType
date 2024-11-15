@@ -1,7 +1,7 @@
-import { Outlet } from 'react-router-dom';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
-import useConfigUpdate from './hooks/useConfigUpdate';
+import { Outlet } from 'react-router-dom'
+import Header from './components/Header/Header'
+import Footer from './components/Footer/Footer'
+import useConfigUpdate from './hooks/useConfigUpdate'
 
 function App() {
   useConfigUpdate()
@@ -12,7 +12,7 @@ function App() {
       <Outlet />
       <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -2,48 +2,48 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { TestResultsType } from './types/testResultsType'
 
 const initialState: TestResultsType = {
-  secondStats:[],
-  extra:0,
-  missed:0,
-  time:0,
-  typedCharacters:0,
-  typedCorrectCharacters:0,
-  incorrect:0,
+  secondStats: [],
+  extra: 0,
+  missed: 0,
+  time: 0,
+  typedCharacters: 0,
+  typedCorrectCharacters: 0,
+  incorrect: 0,
 }
 
 const TestResultsSlice = createSlice({
   name: 'testResults',
   initialState,
   reducers: {
-    updateResults(state, action){
+    updateResults(state, action) {
       state.typedCharacters = action.payload.typedCharacters
       state.typedCorrectCharacters = action.payload.typedCorrectCharacters
       state.extra = action.payload.extra
       state.missed = action.payload.missed
     },
-    updateSecondStats(state, action){
+    updateSecondStats(state, action) {
       state.secondStats = [...state.secondStats, action.payload]
     },
-    
-    updateTypedCharacters(state){
+
+    updateTypedCharacters(state) {
       state.typedCharacters = state.typedCharacters + 1
     },
-    updateTypedCorrectCharacters(state){
+    updateTypedCorrectCharacters(state) {
       state.typedCorrectCharacters = state.typedCorrectCharacters + 1
     },
-    updateExtra(state){
+    updateExtra(state) {
       state.extra = state.extra + 1
     },
-    updateTime(state, action){
+    updateTime(state, action) {
       state.time = action.payload
     },
-    updateMised(state){
+    updateMised(state) {
       state.missed = state.missed + 1
     },
-    updateIncorrect(state,action:PayloadAction<number>){
+    updateIncorrect(state, action: PayloadAction<number>) {
       state.incorrect = action.payload
     },
-    clearAll(state){
+    clearAll(state) {
       state.extra = 0
       state.missed = 0
       state.secondStats = []
@@ -51,7 +51,7 @@ const TestResultsSlice = createSlice({
       state.typedCharacters = 0
       state.typedCorrectCharacters = 0
       state.incorrect = 0
-    }
+    },
   },
 })
 

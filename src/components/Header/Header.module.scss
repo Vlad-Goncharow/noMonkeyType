@@ -1,8 +1,8 @@
-.logo{
+.logo {
   display: flex;
   align-items: center;
 
-  &__icon{
+  &__icon {
     width: 2.5rem;
     display: grid;
     align-items: center;
@@ -14,17 +14,18 @@
     }
   }
 
-  h1{
+  h1 {
     color: var(--text-color);
     position: relative;
     font-size: 1.5rem;
     line-height: 2rem;
-    font-family: Lexend Deca,
-    sans-serif;
-    transition: color .25s;
+    font-family:
+      Lexend Deca,
+      sans-serif;
+    transition: color 0.25s;
     font-weight: unset;
     margin-block-start: unset;
     margin-block-end: unset;
-    margin-top: -.23em;
+    margin-top: -0.23em;
   }
 }
