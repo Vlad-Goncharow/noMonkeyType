@@ -22,7 +22,7 @@ function Header() {
         <h1> noMonkeyType </h1>
       </Link>
       <nav>
-        <Link to={'/'}>
+        <Link to={'/'} className='textButton'>
           <div className='icon'>
             <FontAwesomeIcon
               icon={faKeyboard}
@@ -39,12 +39,12 @@ function Header() {
             />
           </div>
         </button>
-        <Link to={'/settings'}>
+        <Link to={'/ad'} className='textButton'>
           <div className='icon'>
             <FontAwesomeIcon icon={faInfo} />
           </div>
         </Link>
-        <Link to={'/settings'}>
+        <Link to={'/settings'} className='textButton'>
           <div className='icon'>
             <FontAwesomeIcon
               icon={faCog}
@@ -52,7 +52,7 @@ function Header() {
             />
           </div>
         </Link>
-
+        <div></div>
         <button>
           <div className='icon'>
             <FontAwesomeIcon
@@ -62,7 +62,7 @@ function Header() {
           </div>
         </button>
 
-        <Link to={'/login'}>
+        <Link to={'/login'} className='textButton'>
           <div className='icon'>
             <FontAwesomeIcon
               icon={faUser}

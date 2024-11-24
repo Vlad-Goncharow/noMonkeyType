@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TestConfigType } from './types/GameSettingTypes'
+import { TestConfigType } from './types/TestConfigTypes'
 
 const loadInitialState = (): TestConfigType => {
   const storageConfig = localStorage.getItem('config')
@@ -8,6 +8,8 @@ const loadInitialState = (): TestConfigType => {
     : {
         type: 'time',
         time: 15,
+        flipTestColors: false,
+        theme: 'purpleish',
       }
 }
 
@@ -32,6 +34,12 @@ const TestConfigSlice = createSlice({
     changeWords(state, action: PayloadAction<10 | 25 | 50 | 100>) {
       state.words = action.payload
       state.time = undefined
+    },
+    setFlipTestColors(state, action: PayloadAction<boolean>) {
+      state.flipTestColors = action.payload
+    },
+    changeTheme(state, action: PayloadAction<string>) {
+      state.theme = action.payload
     },
   },
 })

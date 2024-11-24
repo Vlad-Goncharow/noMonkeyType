@@ -34,8 +34,11 @@
 @import './dark.scss';
 @import './variables.scss';
 @import './baloon.scss';
-@import './gameSettings.scss';
-// @import './thems/thems.scss';
+@import './testSettings.scss';
+@import './settings.scss';
+@import './buttons.scss';
+@import './nav.scss';
+@import './core.scss';
 
 * {
   padding: 0;
@@ -57,7 +60,12 @@ body {
   background: var(--bg-color);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
+  --roundness: 0.5rem;
   --bg-color: #323437;
   --main-color: #e2b714;
   --caret-color: #e2b714;
@@ -68,33 +76,6 @@ body {
   --error-extra-color: #7e2a33;
   --colorful-error-color: #ca4754;
   --colorful-error-extra-color: #7e2a33;
-}
-
-#app {
-  min-height: 100vh;
-  grid-template-rows: [top-start] auto [content-start] 1fr [content-end] auto [top-end];
-  overflow: hidden;
-  row-gap: 2rem;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  width: 100%;
-}
-
-.content-grid {
-  --padding-inline: 2rem;
-  --content-max-width: 1536px;
-  justify-content: center;
-  display: grid;
-  grid-template-columns: [full-width-start] minmax(0, var(--padding-inline)) [full-width-padding-start] minmax(
-      0,
-      1fr
-    ) [content-start] min(
-      100% - var(--padding-inline) * 2,
-      var(--content-max-width)
-    ) [content-end] minmax(0, 1fr) [full-width-padding-end] minmax(
-      0,
-      var(--padding-inline)
-    ) [full-width-end];
 }
 
 @media only screen and (max-width: calc(1536px + 5rem)) {
@@ -111,34 +92,6 @@ body {
 
 .content-grid > .full-width {
   grid-column: full-width;
-}
-
-header {
-  grid-template-areas: 'logo menu';
-  line-height: 2.3rem;
-  font-size: 2.3rem;
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: auto 1fr;
-  z-index: 2;
-  align-items: center;
-  gap: 0.5rem;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  user-select: none;
-}
-
-nav {
-  font-size: 1rem;
-  line-height: 1rem;
-  color: var(--sub-color);
-  display: grid;
-  grid-auto-flow: column;
-  gap: 0.5rem;
-  width: -moz-fit-content;
-  width: fit-content;
-  width: 100%;
-  grid-template-columns: auto auto auto 1fr auto;
 }
 
 .content-grid > :not(.breakout, .full-width, .full-width-padding) {
