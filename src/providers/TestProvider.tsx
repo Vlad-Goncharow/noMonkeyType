@@ -6,7 +6,7 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { TestResultsActions } from '../redux/slices/TestResult'
 import { getTestConfig } from '../redux/slices/TestConfig/selectors'
 import { testStateActions } from '../redux/slices/TestState'
-import { generateText } from '../utils/wordsGenerator'
+import { generateText, punctuationList } from '../utils/wordsGenerator'
 import { getTestResultData } from '../redux/slices/TestResult/selectors'
 
 interface ITestContext {
@@ -41,7 +41,7 @@ interface ITestProvider {
 }
 
 export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
-  const { time, type, words } = useAppSelector(getTestConfig)
+  const { time, type, words,numbers, punctuation } = useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
   const { isGameStarted, isGameEnded, wordsList } = useAppSelector(getTestState)
   const { typedCharacters, typedCorrectCharacters } =
@@ -116,6 +116,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
 
     let charCode = e.keyCode
     const isLetterOrNumber =
+      (punctuationList.includes(e.key)) ||
       (charCode >= 48 && charCode <= 57) ||
       (charCode >= 65 && charCode <= 90) ||
       (charCode >= 97 && charCode <= 122) ||
@@ -233,7 +234,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     clearAll()
     dispatch(
       testStateActions.setWordsList(
-        generateText(words && type === 'words' ? words : 40, false).split(' ')
+        generateText(words && type === 'words' ? words : 40, false, numbers, punctuation).split(' ')
       )
     )
     setIsRepeated(false)

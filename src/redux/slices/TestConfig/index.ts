@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TestConfigType } from './types/TestConfigTypes'
+import { TestConfigType, TestTime, TestType, TestWords } from './types/TestConfigTypes'
 
 const loadInitialState = (): TestConfigType => {
   const storageConfig = localStorage.getItem('config')
@@ -7,6 +7,8 @@ const loadInitialState = (): TestConfigType => {
     ? JSON.parse(storageConfig)
     : {
         type: 'time',
+        numbers:false,
+        punctuation:false,
         time: 15,
         flipTestColors: false,
         theme: 'purpleish',
@@ -17,7 +19,7 @@ const TestConfigSlice = createSlice({
   name: 'testConfig',
   initialState: loadInitialState(),
   reducers: {
-    changeType(state, action: PayloadAction<'time' | 'words'>) {
+    changeType(state, action: PayloadAction<TestType>) {
       state.type = action.payload
       if (action.payload === 'time') {
         state.time = 15
@@ -27,11 +29,17 @@ const TestConfigSlice = createSlice({
         state.time = undefined
       }
     },
-    changeTime(state, action: PayloadAction<15 | 30 | 60 | 120>) {
+    changeNumbers(state, action: PayloadAction<boolean>) {
+      state.numbers = action.payload
+    },
+    changePunctuation(state, action: PayloadAction<boolean>) {
+      state.punctuation = action.payload
+    },
+    changeTime(state, action: PayloadAction<TestTime>) {
       state.time = action.payload
       state.words = undefined
     },
-    changeWords(state, action: PayloadAction<10 | 25 | 50 | 100>) {
+    changeWords(state, action: PayloadAction<TestWords>) {
       state.words = action.payload
       state.time = undefined
     },

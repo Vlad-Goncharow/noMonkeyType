@@ -11,20 +11,25 @@ import TestSettings from '../../components/TestSettings/TestSettings'
 import { TestProvider } from '../../providers/TestProvider'
 
 function Home() {
-  const { words } = useAppSelector(getTestConfig)
+  const { words, numbers, punctuation } = useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
 
   React.useEffect(() => {
     if (!words) {
       dispatch(
-        testStateActions.setWordsList(generateText(40, false).split(' '))
-      )
+        testStateActions.setWordsList(
+          generateText(40, false, numbers, punctuation).split(' ') 
+        )
+      );
     } else {
       dispatch(
-        testStateActions.setWordsList(generateText(words, false).split(' '))
-      )
+        testStateActions.setWordsList(
+          generateText(words, false, numbers, punctuation).split(' ') 
+        )
+      );
     }
-  }, [words])
+  }, [words, numbers, punctuation, dispatch]);
+
 
   return (
     <main className={'full-width content-grid'} style={{ height: '100%' }}>
