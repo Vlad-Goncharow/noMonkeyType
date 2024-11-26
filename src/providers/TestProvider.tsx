@@ -19,7 +19,6 @@ interface ITestContext {
   showedWordsArray: any
   myKeyDown?: (e: KeyboardEvent) => void
   calcRes?: () => void
-  listenSpace?: (e: KeyboardEvent) => void
   newGame?: () => void
   repeat?: () => void
   clearAll?: () => void
@@ -100,6 +99,21 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   }, [wordsList])
 
   const myKeyDown = (e: KeyboardEvent) => {
+    // Если нажат пробел - сразу обрабатываем его
+    if (e.key === ' ' && typedWord.length > 0) {
+      setTypedWords((prev: any) => [...prev, typedWord])
+      setTypedLetterIndex(0)
+      setTypedCorrectWords((prev: any) => [...prev, showedWordsArray[0]])
+      setShowedWordsArray((prev: any) => prev.slice(1))
+
+      if (typedWord.length < showedWordsArray[0].length) {
+        dispatch(TestResultsActions.updateMised())
+      }
+
+      setTypedWord([])
+      return
+    }
+
     let charCode = e.keyCode
     const isLetterOrNumber =
       (charCode >= 48 && charCode <= 57) ||
@@ -203,22 +217,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     }
   }
 
-  const listenSpace = (e: KeyboardEvent) => {
-    if (e.key === ' ' && typedWord.length > 0) {
-      setTypedWords((prev: any) => [...prev, typedWord])
-
-      setTypedLetterIndex(0)
-      setTypedCorrectWords((prev: any) => [...prev, showedWordsArray[0]])
-      setShowedWordsArray((prev: any) => prev.slice(1))
-
-      if (typedWord.length < showedWordsArray[0].length) {
-        dispatch(TestResultsActions.updateMised())
-      }
-
-      setTypedWord([])
-    }
-  }
-
   const clearAll = () => {
     setTypedWord([])
     setTypedWords([])
@@ -275,7 +273,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         isRepeated,
         myKeyDown,
         calcRes,
-        listenSpace,
         newGame,
         repeat,
         clearAll,

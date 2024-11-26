@@ -8,7 +8,6 @@ import { getTestState } from '../../redux/slices/TestState/selectors'
 const Test: React.FC = () => {
   const {
     myKeyDown,
-    listenSpace,
     typedLetterIndex,
     showedWordsArray,
     typedCorrectWords,
@@ -23,14 +22,11 @@ const Test: React.FC = () => {
   React.useEffect(() => {
     if (myKeyDown && !isGameEnded)
       document.addEventListener('keydown', myKeyDown)
-    if (listenSpace && !isGameEnded)
-      document.addEventListener('keyup', listenSpace)
 
     return () => {
       if (myKeyDown) document.removeEventListener('keydown', myKeyDown)
-      if (listenSpace) document.removeEventListener('keyup', listenSpace)
     }
-  }, [myKeyDown, listenSpace])
+  }, [myKeyDown])
 
   return (
     <div className={classNames(s.words, 'full-width')}>
