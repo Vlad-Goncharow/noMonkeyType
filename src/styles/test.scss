@@ -17,7 +17,10 @@
     z-index: 1;
 
     &.withAnimation {
-      transition: left 0.25s ease, right 0.25s ease, opacity 0.125s linear;
+      transition:
+        left 0.25s ease,
+        right 0.25s ease,
+        opacity 0.125s linear;
     }
 
     &.highlight-hidden {
@@ -463,9 +466,9 @@
   }
 
   &.lastbeforenewline::after {
-    font-family: "Font Awesome";
+    font-family: 'Font Awesome';
     font-weight: 600;
-    content: "\f107";
+    content: '\f107';
     margin-left: 0.5rem;
     opacity: 0.25;
   }
@@ -504,12 +507,14 @@
   &.error {
     /*   margin-bottom: 1px; */
     border-bottom: 2px solid var(--error-color);
-    text-shadow: 1px 0px 0px var(--bg-color),
+    text-shadow:
+      1px 0px 0px var(--bg-color),
       // 2px 0px 0px var(--bg-color),
       -1px 0px 0px var(--bg-color),
       // -2px 0px 0px var(--bg-color),
       0px 1px 0px var(--bg-color),
-      1px 1px 0px var(--bg-color), -1px 1px 0px var(--bg-color);
+      1px 1px 0px var(--bg-color),
+      -1px 1px 0px var(--bg-color);
   }
 }
 
@@ -598,8 +603,8 @@
     align-items: center;
     grid-template-columns: auto 1fr;
     grid-template-areas:
-      "stats chart"
-      "morestats morestats";
+      'stats chart'
+      'morestats morestats';
     // "wordsHistory wordsHistory"
     // "buttons buttons"
     // "login login"
@@ -783,8 +788,8 @@
       //   "wpm acc key consistency testType leaderboards source"
       //   "wpm raw time nothing infoAndTags leaderboards source";
       grid-template-areas:
-        "wpm"
-        "acc";
+        'wpm'
+        'acc';
 
       &.morestats {
         display: grid;
@@ -910,11 +915,14 @@
             height: 1.7rem;
             border-radius: var(--roundness);
             display: grid;
-            grid-template-areas: "icon";
+            grid-template-areas: 'icon';
             align-items: center;
             justify-items: center;
 
-            transition: opacity 0.125s, background 0.125s, color 0.125s,
+            transition:
+              opacity 0.125s,
+              background 0.125s,
+              color 0.125s,
               outline 0.125s;
 
             i {
@@ -1220,6 +1228,7 @@
     opacity: 0;
   }
   .outOfFocusWarning {
+    margin-top: 50px;
     text-align: center;
     height: 0;
     font-size: 1rem;
@@ -1229,6 +1238,10 @@
     -webkit-user-select: none;
     user-select: none;
     pointer-events: none;
+
+    svg {
+      margin-right: 30px;
+    }
   }
 
   #testModesNotice {

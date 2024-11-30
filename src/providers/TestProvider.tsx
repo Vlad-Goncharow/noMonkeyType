@@ -16,7 +16,10 @@ interface ITestContext {
   typedCorrectWords: string[]
   timeElapsed: number
   isRepeated: boolean
+  isBlured: boolean
   showedWordsArray: any
+  setUnBlured?: () => void
+  setBlured?: () => void
   myKeyDown?: (e: KeyboardEvent) => void
   calcRes?: () => void
   newGame?: () => void
@@ -32,6 +35,7 @@ const defaultValue: ITestContext = {
   timeElapsed: 0,
   showedWordsArray: [],
   isRepeated: false,
+  isBlured: false,
 }
 
 export const TestContext = createContext<ITestContext>(defaultValue)
@@ -41,12 +45,14 @@ interface ITestProvider {
 }
 
 export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
-  const { time, type, words,numbers, punctuation } = useAppSelector(getTestConfig)
+  const { time, type, words, numbers, punctuation } =
+    useAppSelector(getTestConfig)
   const dispatch = useAppDispatch()
   const { isGameStarted, isGameEnded, wordsList } = useAppSelector(getTestState)
   const { typedCharacters, typedCorrectCharacters } =
     useAppSelector(getTestResultData)
 
+  const [isBlured, setIsBlured] = React.useState(false)
   const [typedLetterIndex, setTypedLetterIndex] = React.useState<number>(0)
   const [showedWordsArray, setShowedWordsArray] = React.useState<any>(wordsList)
   const [typedWord, setTypedWord] = React.useState<any>([])
@@ -116,7 +122,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
 
     let charCode = e.keyCode
     const isLetterOrNumber =
-      (punctuationList.includes(e.key)) ||
+      punctuationList.includes(e.key) ||
       (charCode >= 48 && charCode <= 57) ||
       (charCode >= 65 && charCode <= 90) ||
       (charCode >= 97 && charCode <= 122) ||
@@ -218,6 +224,34 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     }
   }
 
+  React.useEffect(() => {
+    const handeMouse = () => {
+      setTimeElapsed((prev) => prev)
+      dispatch(testStateActions.changeIsGameIsStarded(false))
+    }
+
+    if (isGameStarted) {
+      document.addEventListener('mousemove', handeMouse)
+      document.body.style.cursor = 'none'
+    } else {
+      document.body.style.cursor = ''
+      return () => {
+        document.removeEventListener('mousemove', handeMouse)
+      }
+    }
+  }, [isGameStarted])
+
+  const setBlured = () => {
+    setIsBlured(true)
+
+    setTimeElapsed((prev) => prev)
+    dispatch(testStateActions.changeIsGameIsStarded(false))
+  }
+  const setUnBlured = () => {
+    setIsBlured(false)
+    document.body.style.cursor = ''
+  }
+
   const clearAll = () => {
     setTypedWord([])
     setTypedWords([])
@@ -234,7 +268,12 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     clearAll()
     dispatch(
       testStateActions.setWordsList(
-        generateText(words && type === 'words' ? words : 40, false, numbers, punctuation).split(' ')
+        generateText(
+          words && type === 'words' ? words : 40,
+          false,
+          numbers,
+          punctuation
+        ).split(' ')
       )
     )
     setIsRepeated(false)
@@ -272,6 +311,9 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         timeElapsed,
         showedWordsArray,
         isRepeated,
+        isBlured,
+        setUnBlured,
+        setBlured,
         myKeyDown,
         calcRes,
         newGame,

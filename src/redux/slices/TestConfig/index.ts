@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { TestConfigType, TestTime, TestType, TestWords } from './types/TestConfigTypes'
+import {
+  TestConfigType,
+  TestTime,
+  TestType,
+  TestWords,
+} from './types/TestConfigTypes'
 
 const loadInitialState = (): TestConfigType => {
   const storageConfig = localStorage.getItem('config')
@@ -7,8 +12,8 @@ const loadInitialState = (): TestConfigType => {
     ? JSON.parse(storageConfig)
     : {
         type: 'time',
-        numbers:false,
-        punctuation:false,
+        numbers: false,
+        punctuation: false,
         time: 15,
         flipTestColors: false,
         theme: 'purpleish',

@@ -6,6 +6,7 @@ import { useAppSelector } from '../../hooks/useAppSelector'
 import { getTestState } from '../../redux/slices/TestState/selectors'
 
 const Test: React.FC = () => {
+  const wordsRef = React.useRef<HTMLDivElement | null>(null)
   const {
     myKeyDown,
     typedLetterIndex,
@@ -13,23 +14,45 @@ const Test: React.FC = () => {
     typedCorrectWords,
     typedWord,
     typedWords,
+    isBlured,
+    setUnBlured,
   } = useContext(TestContext)
 
   const { isGameEnded } = useAppSelector(getTestState)
 
   const typedWordIndex = 0
+  const clickHandle = () => {
+    let outOfFocusWarningDoc = document.querySelector(
+      '.outOfFocusWarning'
+    ) as Element
+
+    if (outOfFocusWarningDoc && wordsRef.current) {
+      wordsRef.current.classList.remove('blurred')
+      outOfFocusWarningDoc.classList.add('hidden')
+      if (setUnBlured) setUnBlured()
+    }
+  }
 
   React.useEffect(() => {
-    if (myKeyDown && !isGameEnded)
+    if (myKeyDown && !isGameEnded && !isBlured) {
       document.addEventListener('keydown', myKeyDown)
+    }
+
+    if (wordsRef.current) {
+      wordsRef.current.addEventListener('mousedown', clickHandle)
+    }
 
     return () => {
       if (myKeyDown) document.removeEventListener('keydown', myKeyDown)
     }
-  }, [myKeyDown])
+  }, [myKeyDown, isBlured])
 
   return (
-    <div className={classNames(s.words, 'full-width')}>
+    <div
+      ref={wordsRef}
+      id='words'
+      className={classNames(s.words, 'full-width')}
+    >
       {typedCorrectWords.map((wordEl: any, wordI: any) => (
         <div
           key={`${wordEl}-${wordI}`}

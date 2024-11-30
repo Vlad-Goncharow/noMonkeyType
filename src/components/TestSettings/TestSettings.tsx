@@ -1,7 +1,14 @@
 import React from 'react'
 import { useAppSelector } from '../../hooks/useAppSelector'
 import { getTestConfig } from '../../redux/slices/TestConfig/selectors'
-import { modeArray, ModeArrayObjectType, TestMode, timesArray, typesArray, wordsArray } from '../../config/TestConfig'
+import {
+  modeArray,
+  ModeArrayObjectType,
+  TestMode,
+  timesArray,
+  typesArray,
+  wordsArray,
+} from '../../config/TestConfig'
 import { useAppDispatch } from '../../hooks/useAppDispatch'
 import { TestConfigActions } from '../../redux/slices/TestConfig'
 import classNames from 'classnames'
@@ -9,19 +16,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { getTestState } from '../../redux/slices/TestState/selectors'
 import { testStateActions } from '../../redux/slices/TestState'
 import { TestContext } from '../../providers/TestProvider'
-import { TestTime, TestType, TestWords } from '../../redux/slices/TestConfig/types/TestConfigTypes'
+import {
+  TestTime,
+  TestType,
+  TestWords,
+} from '../../redux/slices/TestConfig/types/TestConfigTypes'
 
 function GameSettings() {
   const dispatch = useAppDispatch()
-  const { type, time, words, numbers, punctuation } = useAppSelector(getTestConfig)
+  const { type, time, words, numbers, punctuation } =
+    useAppSelector(getTestConfig)
   const { isGameEnded, isGameStarted } = useAppSelector(getTestState)
   const { clearAll } = React.useContext(TestContext)
 
   const changeMode = (modeP: TestMode) => {
-    if(modeP === 'numbers') {
+    if (modeP === 'numbers') {
       dispatch(TestConfigActions.changeNumbers(!numbers))
     }
-    if(modeP === 'punctuation') {
+    if (modeP === 'punctuation') {
       dispatch(TestConfigActions.changePunctuation(!punctuation))
     }
 
@@ -31,8 +43,7 @@ function GameSettings() {
     if (clearAll) clearAll()
   }
 
-
-  const changeType = (type:TestType) => {
+  const changeType = (type: TestType) => {
     dispatch(TestConfigActions.changeType(type))
     dispatch(testStateActions.changeIsActive(false))
     dispatch(testStateActions.changeIsGameIsStarded(false))
@@ -49,7 +60,7 @@ function GameSettings() {
 
   const idk = () => {
     if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+      document.activeElement.blur()
     }
   }
 
@@ -62,23 +73,23 @@ function GameSettings() {
       onClick={idk}
     >
       <div className='row'>
-        <div className="puncAndNum">
-          {
-            modeArray.map((el:ModeArrayObjectType) => 
-              <button
-                className={classNames('textButton', {
-                  active: (el.mode === 'punctuation' && punctuation) || (el.mode === 'numbers' && numbers)
-                })}
-                key={el.mode}
-                onClick={() => changeMode(el.mode)}
-              >
-                <FontAwesomeIcon icon={el.icon} />
-                {el.mode}
-              </button>
-            )
-          }
+        <div className='puncAndNum'>
+          {modeArray.map((el: ModeArrayObjectType) => (
+            <button
+              className={classNames('textButton', {
+                active:
+                  (el.mode === 'punctuation' && punctuation) ||
+                  (el.mode === 'numbers' && numbers),
+              })}
+              key={el.mode}
+              onClick={() => changeMode(el.mode)}
+            >
+              <FontAwesomeIcon icon={el.icon} />
+              {el.mode}
+            </button>
+          ))}
         </div>
-      <div className="spacer leftSpacer"></div>
+        <div className='spacer leftSpacer'></div>
         <div className='mode'>
           {typesArray.map((el) => (
             <button
@@ -127,7 +138,6 @@ function GameSettings() {
         </div>
       </div>
     </div>
-    
   )
 }
 

@@ -1,17 +1,26 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { TestTime, TestType, TestWords } from "../redux/slices/TestConfig/types/TestConfigTypes";
-import { faA, faAt, faClock, faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+import {
+  TestTime,
+  TestType,
+  TestWords,
+} from '../redux/slices/TestConfig/types/TestConfigTypes'
+import {
+  faA,
+  faAt,
+  faClock,
+  faHashtag,
+} from '@fortawesome/free-solid-svg-icons'
 
-export type TestMode = 'punctuation' | 'numbers';
+export type TestMode = 'punctuation' | 'numbers'
 
 interface TypesArrayObjectType {
-  type: TestType;
-  icon: IconDefinition;
+  type: TestType
+  icon: IconDefinition
 }
 
 export interface ModeArrayObjectType {
-  mode: TestMode;
-  icon: IconDefinition;
+  mode: TestMode
+  icon: IconDefinition
 }
 
 // Константы
@@ -24,7 +33,7 @@ export const typesArray: TypesArrayObjectType[] = [
     type: 'words',
     icon: faA,
   },
-];
+]
 
 export const modeArray: ModeArrayObjectType[] = [
   {
@@ -35,7 +44,7 @@ export const modeArray: ModeArrayObjectType[] = [
     mode: 'numbers',
     icon: faHashtag,
   },
-];
+]
 
-export const timesArray: TestTime[] = [15, 30, 60, 120];
-export const wordsArray: TestWords[] = [10, 25, 50, 100];
+export const timesArray: TestTime[] = [15, 30, 60, 120]
+export const wordsArray: TestWords[] = [10, 25, 50, 100]
