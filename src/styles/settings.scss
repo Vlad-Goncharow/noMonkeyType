@@ -536,3 +536,26 @@
     margin 0.3s ease;
   transform-origin: top;
 }
+
+input[type='color'] {
+  height: 3px;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+input,
+textarea {
+  outline: none;
+  border: none;
+  border-radius: var(--roundness);
+  background: var(--sub-alt-color);
+  color: var(--text-color);
+  padding: 0.5em;
+  font-size: 1em;
+  font-family: var(--font);
+  caret-color: var(--main-color);
+  line-height: 1.25em;
+}

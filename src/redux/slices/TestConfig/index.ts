@@ -16,7 +16,20 @@ const loadInitialState = (): TestConfigType => {
         punctuation: false,
         time: 15,
         flipTestColors: false,
-        theme: 'purpleish',
+        theme: 'serika_dark',
+        customTheme: false,
+        customThemeColors: [
+          '#323437',
+          '#e2b714',
+          '#e2b714',
+          '#646669',
+          '#2c2e31',
+          '#d1d0c5',
+          '#ca4754',
+          '#7e2a33',
+          '#ca4754',
+          '#7e2a33',
+        ],
       }
 }
 
@@ -52,7 +65,14 @@ const TestConfigSlice = createSlice({
       state.flipTestColors = action.payload
     },
     changeTheme(state, action: PayloadAction<string>) {
+      state.customTheme = false
       state.theme = action.payload
+    },
+    changeCustomTheme(state, action: PayloadAction<boolean>) {
+      state.customTheme = action.payload
+    },
+    changeCustomThemeColors(state, action: PayloadAction<string[]>) {
+      state.customThemeColors = action.payload
     },
   },
 })

@@ -10,4 +10,6 @@ export interface TestConfigType {
   words?: TestWords
   flipTestColors: boolean
   theme: string
+  customTheme: boolean
+  customThemeColors: string[]
 }
