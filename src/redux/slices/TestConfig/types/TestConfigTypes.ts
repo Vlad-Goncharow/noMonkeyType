@@ -12,4 +12,5 @@ export interface TestConfigType {
   theme: string
   customTheme: boolean
   customThemeColors: string[]
+  capsLockWarning: boolean
 }

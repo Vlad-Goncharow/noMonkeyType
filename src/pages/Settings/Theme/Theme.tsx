@@ -14,6 +14,14 @@ import themes from '../../../utils/themes/_list.json'
 import classNames from 'classnames'
 import { colorVars } from '../../../utils/theme-colors'
 
+type themesType = {
+  name: string
+  bgColor: string
+  mainColor: string
+  subColor: string
+  textColor: string
+}
+
 const colorInputs = [
   { id: '--bg-color', label: 'background' },
   { id: '--sub-alt-color', label: 'sub alt' },
@@ -35,7 +43,7 @@ function Theme() {
   const { flipTestColors, theme, customTheme, customThemeColors } =
     useAppSelector(getTestConfig)
 
-  const [copyCustomColors, setCopyCustomColors] = React.useState([
+  const [copyCustomColors, setCopyCustomColors] = React.useState<string[]>([
     ...customThemeColors,
   ])
 
@@ -43,8 +51,8 @@ function Theme() {
     dispatch(TestConfigActions.setFlipTestColors(val))
   }
 
-  const changeTheme = (theme: any) => {
-    dispatch(TestConfigActions.changeTheme(theme.name))
+  const changeTheme = (theme: string) => {
+    dispatch(TestConfigActions.changeTheme(theme))
   }
 
   const changeCustomTheme = (bool: boolean) => {
@@ -60,11 +68,11 @@ function Theme() {
     dispatch(TestConfigActions.changeCustomThemeColors([...copyCustomColors]))
   }
 
-  const onChangeColor = (e: any) => {
+  const onChangeColor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const findThemeEl = colorVars.findIndex((el) => el === e.target.id)
     if (findThemeEl !== -1 && copyCustomColors) {
       setCopyCustomColors((prev) => {
-        return prev.map((el: any, i: any) => {
+        return prev.map((el, i: number) => {
           if (i === findThemeEl) {
             document.documentElement.style.setProperty(
               e.target.id,
@@ -81,20 +89,21 @@ function Theme() {
 
   //mb not best solution
   const loadColorsFromCurrentTheme = () => {
-    const file: any = document.getElementById('currentTheme')
+    const file = document.getElementById(
+      'currentTheme'
+    ) as HTMLLinkElement | null
 
     if (!file || !file.sheet) {
       console.error('Stylesheet not found or inaccessible.')
       return []
     }
 
-    const cssRules = file.sheet.cssRules
-    const variables: any = []
+    const cssRules = Array.from(file.sheet.cssRules)
+    const variables: Record<string, string>[] = []
 
     for (let rule of cssRules) {
-      // Check if the rule applies to `:root`
-      if (rule.selectorText === ':root') {
-        const style = rule.style
+      if ((rule as CSSStyleRule).selectorText === ':root') {
+        const style = (rule as CSSStyleRule).style
 
         for (let i = 0; i < style.length; i++) {
           const property = style[i]
@@ -108,7 +117,7 @@ function Theme() {
     }
 
     setCopyCustomColors([])
-    variables.forEach((varName: any, index: any) => {
+    variables.forEach((varName, index) => {
       setCopyCustomColors((prev) => [...prev, varName[colorVars[index]]])
       document.documentElement.style.setProperty(
         colorVars[index],
@@ -118,7 +127,7 @@ function Theme() {
   }
 
   const showThemeHash = React.useCallback(
-    (style: any) => {
+    (style: string) => {
       const findThemeEl = colorVars.findIndex((el) => el === style)
 
       return copyCustomColors[findThemeEl]
@@ -133,7 +142,7 @@ function Theme() {
         onClick={changeActiveSection}
         data-gruop='theme'
         className={classNames('text sectionGroupTitle', {
-          rotateIcon: activeSection.find((el: any) => el === 'theme'),
+          rotateIcon: activeSection.includes('theme'),
         })}
       >
         <FontAwesomeIcon icon={faAngleRight} />
@@ -255,7 +264,7 @@ function Theme() {
               })}
             >
               <div className='allThemes buttons'>
-                {themes.map((el) => (
+                {themes.map((el: themesType) => (
                   <div
                     key={el.name}
                     className={classNames('theme button', {
@@ -267,7 +276,7 @@ function Theme() {
                       color: el.mainColor,
                       outline: el.subColor,
                     }}
-                    onClick={() => changeTheme(el)}
+                    onClick={() => changeTheme(el.name)}
                   >
                     {el.name}
                   </div>
@@ -276,6 +285,7 @@ function Theme() {
             </div>
           </div>
         </div>
+        <div className='sectionSpacer'></div>
       </div>
     </>
   )

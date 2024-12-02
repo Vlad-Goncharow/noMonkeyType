@@ -569,6 +569,10 @@
   pointer-events: none;
   top: -2.5rem;
 
+  svg {
+    margin-right: 15px;
+  }
+
   &.focus {
     // top: 0rem;
   }

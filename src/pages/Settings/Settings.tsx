@@ -7,10 +7,23 @@ import {
   faAnglesUp,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
+import HideElements from './HideElements/HideElements'
+
+const allowedSections = [
+  'behavior',
+  'input',
+  'sound',
+  'caret',
+  'appearance',
+  'theme',
+  'hideElements',
+  'dangerZone',
+] as const
+type Section = (typeof allowedSections)[number]
 
 interface SettingsContextType {
-  activeSection: []
-  changeActiveSection?: any
+  activeSection: Section[]
+  changeActiveSection?: (e: React.MouseEvent<HTMLElement>) => void
 }
 
 export const SettingsContext = createContext<SettingsContextType>({
@@ -20,17 +33,19 @@ export const SettingsContext = createContext<SettingsContextType>({
 let timeoutId: NodeJS.Timeout | null = null
 
 const Settings = () => {
-  //now i do theme sections
   // const [activeSection, setActiveSection] = React.useState<any>(['behavior', 'input', 'sound', 'caret','appearance','theme','hideElements','dangerZone'])
-  const [activeSection, setActiveSection] = React.useState<any>(['theme'])
+  const [activeSection, setActiveSection] = React.useState<Section[]>([
+    'theme',
+    'hideElements',
+  ])
 
-  const changeActiveSection = (e: any) => {
-    const group = e.target.attributes['data-gruop'].value
+  const changeActiveSection = (e: React.MouseEvent<HTMLElement>) => {
+    const group = e.currentTarget.getAttribute('data-gruop') as Section
     const doc = document.querySelector<HTMLDivElement>(`.${group}`)
 
-    if (!doc) return
+    if (!doc || !group) return
 
-    if (activeSection.some((el: any) => el === group)) {
+    if (activeSection.some((el) => el === group)) {
       if (timeoutId) {
         clearTimeout(timeoutId)
       }
@@ -45,9 +60,7 @@ const Settings = () => {
         timeoutId = null
       }, 200)
 
-      setActiveSection((prev: any) =>
-        prev.filter((item: any) => item !== group)
-      )
+      setActiveSection((prev) => prev.filter((item) => item !== group))
     } else {
       if (timeoutId) {
         clearTimeout(timeoutId)
@@ -62,21 +75,22 @@ const Settings = () => {
       doc.style.overflow = ''
       doc.style.maxHeight = ''
 
-      setActiveSection((prev: any) => [...prev, group])
+      setActiveSection((prev) => [...prev, group])
     }
   }
 
-  const myNavLinksScroll = (e: any) => {
-    let doc = document.querySelector<HTMLDivElement>(`.${e.target.innerText}`)
+  const myNavLinksScroll = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const hash = e.currentTarget.hash.split('_')[1] as Section | undefined
+    const doc = document.querySelector<HTMLDivElement>(`.${hash}`)
 
-    if (!doc) return
+    if (!doc || !hash) return
 
     doc.style.display = ''
     doc.style.overflow = ''
     doc.style.maxHeight = ''
 
-    if (!activeSection.includes(e.target.innerText)) {
-      setActiveSection((prev: any) => [...prev, e.target.innerText])
+    if (!activeSection.includes(hash)) {
+      setActiveSection((prev) => [...prev, hash])
     }
   }
 
@@ -122,7 +136,11 @@ const Settings = () => {
             >
               theme
             </a>
-            <a className='textButton' href='#group_hideElements'>
+            <a
+              onClick={myNavLinksScroll}
+              className='textButton'
+              href='#group_hideElements'
+            >
               hide elements
             </a>
             <a className='textButton' href='#group_dangerZone'>
@@ -146,7 +164,7 @@ const Settings = () => {
           onClick={changeActiveSection}
           data-gruop='behavior'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'behavior'),
+            rotateIcon: activeSection.includes('behavior'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />
@@ -157,7 +175,7 @@ const Settings = () => {
           onClick={changeActiveSection}
           data-gruop='input'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'input'),
+            rotateIcon: activeSection.includes('input'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />
@@ -168,7 +186,7 @@ const Settings = () => {
           onClick={changeActiveSection}
           data-gruop='sound'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'sound'),
+            rotateIcon: activeSection.includes('sound'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />
@@ -179,7 +197,7 @@ const Settings = () => {
           onClick={changeActiveSection}
           data-gruop='caret'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'caret'),
+            rotateIcon: activeSection.includes('caret'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />
@@ -190,30 +208,20 @@ const Settings = () => {
           onClick={changeActiveSection}
           data-gruop='appearance'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'appearance'),
+            rotateIcon: activeSection.includes('appearance'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />
           appearance
         </button>
         <Theme />
-        <button
-          id='group_hideElements'
-          onClick={changeActiveSection}
-          data-gruop='hideElements'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'hideElements'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          hide elements
-        </button>
+        <HideElements />
         <button
           id='group_dangerZone'
           onClick={changeActiveSection}
           data-gruop='dangerZone'
           className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.find((el: any) => el === 'dangerZone'),
+            rotateIcon: activeSection.includes('dangerZone'),
           })}
         >
           <FontAwesomeIcon icon={faAngleRight} />

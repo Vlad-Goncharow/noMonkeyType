@@ -12,6 +12,7 @@ import { TestProvider } from '../../providers/TestProvider'
 import Overflow from './components/Overflow/Overflow'
 import classNames from 'classnames'
 import { getTestState } from '../../redux/slices/TestState/selectors'
+import CupsLockWarning from './components/CupsLockWarning/CupsLockWarning'
 
 function Home() {
   const { words, numbers, punctuation } = useAppSelector(getTestConfig)
@@ -48,6 +49,7 @@ function Home() {
                 })}
                 style={{ maxWidth: '100%' }}
               >
+                <CupsLockWarning />
                 <TypeProvider>
                   <Overflow />
                   <Test />

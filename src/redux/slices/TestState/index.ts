@@ -7,6 +7,7 @@ const initialState: testStateType = {
   wordsList: [],
   isGameEnded: false,
   isGameStarted: false,
+  isCapsLockOn: false,
 }
 
 const testStateSlice = createSlice({
@@ -27,6 +28,9 @@ const testStateSlice = createSlice({
     },
     changeIsGameIsEnded(state, action: PayloadAction<boolean>) {
       state.isGameEnded = action.payload
+    },
+    changeIsCapsLockOn(state, action: PayloadAction<boolean>) {
+      state.isCapsLockOn = action.payload
     },
   },
 })

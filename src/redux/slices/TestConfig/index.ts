@@ -30,6 +30,7 @@ const loadInitialState = (): TestConfigType => {
           '#ca4754',
           '#7e2a33',
         ],
+        capsLockWarning: true,
       }
 }
 
@@ -73,6 +74,9 @@ const TestConfigSlice = createSlice({
     },
     changeCustomThemeColors(state, action: PayloadAction<string[]>) {
       state.customThemeColors = action.payload
+    },
+    changeCapsLockWarning(state, action: PayloadAction<boolean>) {
+      state.capsLockWarning = action.payload
     },
   },
 })

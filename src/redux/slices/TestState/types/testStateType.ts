@@ -4,4 +4,5 @@ export interface testStateType {
   wordsList: string[] | []
   isGameStarted: boolean
   isGameEnded: boolean
+  isCapsLockOn: boolean
 }
