@@ -18,6 +18,7 @@ interface ITestContext {
   isRepeated: boolean
   isBlured: boolean
   showedWordsArray: any
+  typedWordsCount: number
   setUnBlured?: () => void
   setBlured?: () => void
   myKeyDown?: (e: KeyboardEvent) => void
@@ -36,6 +37,7 @@ const defaultValue: ITestContext = {
   showedWordsArray: [],
   isRepeated: false,
   isBlured: false,
+  typedWordsCount: 0,
 }
 
 export const TestContext = createContext<ITestContext>(defaultValue)
@@ -61,6 +63,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   const [errors, setErrors] = React.useState<number>(0)
   const [timeElapsed, setTimeElapsed] = React.useState<number>(0)
   const [isRepeated, setIsRepeated] = React.useState<boolean>(false)
+  const [typedWordsCount, setTypedWordsCount] = React.useState(0)
 
   React.useEffect(() => {
     const countLetterErrors = (): number => {
@@ -105,6 +108,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   }, [wordsList])
 
   const myKeyDown = (e: KeyboardEvent) => {
+    const wordsEL = document.querySelector('#words') as Element
     // Если нажат пробел - сразу обрабатываем его
     if (e.key === ' ' && typedWord.length > 0) {
       setTypedWords((prev: any) => [...prev, typedWord])
@@ -117,6 +121,23 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       }
 
       setTypedWord([])
+
+      //Deletes already typed words to show those that are hidden because of the height of 200 px
+      setTypedWordsCount((prev) => prev + 1)
+
+      //A percentage of the part of the words you can see
+      let wordsSeePercentage = Math.floor(
+        (wordsEL.clientHeight / wordsEL.scrollHeight) * 100
+      )
+      const wordsByPerocentage = Math.floor(
+        (showedWordsArray.length / 100) * wordsSeePercentage
+      )
+
+      if (wordsSeePercentage < 75 && typedWords.length > wordsByPerocentage) {
+        setTypedCorrectWords((prev: any) => prev.slice(wordsByPerocentage))
+        setTypedWords((prev: any) => prev.slice(wordsByPerocentage))
+      }
+
       return
     }
 
@@ -259,6 +280,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     setErrors(0)
     setTimeElapsed(0)
     setTypedLetterIndex(0)
+    setTypedWordsCount(0)
     dispatch(TestResultsActions.clearAll())
   }
 
@@ -312,6 +334,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         showedWordsArray,
         isRepeated,
         isBlured,
+        typedWordsCount,
         setUnBlured,
         setBlured,
         myKeyDown,

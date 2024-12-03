@@ -52,6 +52,7 @@ const Test: React.FC = () => {
       ref={wordsRef}
       id='words'
       className={classNames(s.words, 'full-width')}
+      style={{ height: '200px', overflow: 'hidden' }}
     >
       {typedCorrectWords.map((wordEl: any, wordI: any) => (
         <div
