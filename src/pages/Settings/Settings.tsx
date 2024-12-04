@@ -8,6 +8,7 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
 import HideElements from './HideElements/HideElements'
+import Caret from './Caret/Caret'
 
 const allowedSections = [
   'behavior',
@@ -35,6 +36,7 @@ let timeoutId: NodeJS.Timeout | null = null
 const Settings = () => {
   // const [activeSection, setActiveSection] = React.useState<any>(['behavior', 'input', 'sound', 'caret','appearance','theme','hideElements','dangerZone'])
   const [activeSection, setActiveSection] = React.useState<Section[]>([
+    'caret',
     'theme',
     'hideElements',
   ])
@@ -123,7 +125,11 @@ const Settings = () => {
             <a className='textButton' href='#group_sound'>
               sound
             </a>
-            <a className='textButton' href='#group_caret'>
+            <a
+              onClick={myNavLinksScroll}
+              className='textButton'
+              href='#group_caret'
+            >
               caret
             </a>
             <a className='textButton' href='#group_appearance'>
@@ -192,17 +198,7 @@ const Settings = () => {
           <FontAwesomeIcon icon={faAngleRight} />
           sound
         </button>
-        <button
-          id='group_caret'
-          onClick={changeActiveSection}
-          data-gruop='caret'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('caret'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          caret
-        </button>
+        <Caret />
         <button
           id='group_appearance'
           onClick={changeActiveSection}

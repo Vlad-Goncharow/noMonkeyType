@@ -198,7 +198,7 @@
   --extra-letter-animation: none;
 
   .word {
-    letter {
+    .letter {
       color: var(--untyped-letter-color);
       animation: var(--untyped-letter-animation);
       border-bottom-style: solid;
@@ -455,14 +455,22 @@
 }
 
 .word {
+  display: flex;
+  align-items: center;
   position: relative;
-  font-size: 1em;
+  font-size: 2em;
   line-height: 1em;
   margin: 0.25em 0.3em;
   font-variant: no-common-ligatures;
   border-bottom: 2px solid transparent;
-  letter {
+
+  .letter {
     display: inline-block;
+
+    &.correct {
+      color: var(--correct-letter-color);
+      animation: var(--correct-letter-animation);
+    }
   }
 
   &.lastbeforenewline::after {

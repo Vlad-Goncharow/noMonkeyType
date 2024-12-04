@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import {
+  SmothCaretType,
   TestConfigType,
   TestTime,
   TestType,
@@ -31,6 +32,7 @@ const loadInitialState = (): TestConfigType => {
           '#7e2a33',
         ],
         capsLockWarning: true,
+        smoothCaret: 'slow',
       }
 }
 
@@ -77,6 +79,9 @@ const TestConfigSlice = createSlice({
     },
     changeCapsLockWarning(state, action: PayloadAction<boolean>) {
       state.capsLockWarning = action.payload
+    },
+    changeSmoothCaret(state, action: PayloadAction<SmothCaretType>) {
+      state.smoothCaret = action.payload
     },
   },
 })

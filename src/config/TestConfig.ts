@@ -1,5 +1,6 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import {
+  SmothCaretType,
   TestTime,
   TestType,
   TestWords,
@@ -21,6 +22,10 @@ interface TypesArrayObjectType {
 export interface ModeArrayObjectType {
   mode: TestMode
   icon: IconDefinition
+}
+
+export interface SmoothCaretObjectType {
+  name: SmothCaretType
 }
 
 // Константы
@@ -45,6 +50,28 @@ export const modeArray: ModeArrayObjectType[] = [
     icon: faHashtag,
   },
 ]
+
+export const smoothCaretArray: SmoothCaretObjectType[] = [
+  {
+    name: 'off',
+  },
+  {
+    name: 'slow',
+  },
+  {
+    name: 'medium',
+  },
+  {
+    name: 'fast',
+  },
+]
+
+export const SmoothCaretSpeed: Record<SmothCaretType, number> = {
+  off: 0,
+  slow: 30,
+  medium: 20,
+  fast: 15,
+}
 
 export const timesArray: TestTime[] = [15, 30, 60, 120]
 export const wordsArray: TestWords[] = [10, 25, 50, 100]
