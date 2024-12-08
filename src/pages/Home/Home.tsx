@@ -8,7 +8,6 @@ import { generateText } from '../../utils/wordsGenerator'
 import TypeProvider from './components/TypeProvider/TypeProvider'
 import Results from './components/Results/Results'
 import TestSettings from '../../components/TestSettings/TestSettings'
-import { TestProvider } from '../../providers/TestProvider'
 import Overflow from './components/Overflow/Overflow'
 import classNames from 'classnames'
 import { getTestState } from '../../redux/slices/TestState/selectors'
@@ -38,27 +37,21 @@ function Home() {
   return (
     <main className={'full-width content-grid'} style={{ height: '100%' }}>
       <div className={'page pageTest full-width content-grid active'}>
-        {
-          <TestProvider>
-            <>
-              <TestSettings />
-              <div
-                id='typingTest'
-                className={classNames('content-grid content', {
-                  hidden: isGameEnded && !isGameStarted,
-                })}
-                style={{ maxWidth: '100%' }}
-              >
-                <CupsLockWarning />
-                <TypeProvider>
-                  <Overflow />
-                  <Test />
-                </TypeProvider>
-              </div>
-              <Results />
-            </>
-          </TestProvider>
-        }
+        <TestSettings />
+        <div
+          id='typingTest'
+          className={classNames('content-grid content', {
+            hidden: isGameEnded && !isGameStarted,
+          })}
+          style={{ maxWidth: '100%' }}
+        >
+          <CupsLockWarning />
+          <TypeProvider>
+            <Overflow />
+            <Test />
+          </TypeProvider>
+        </div>
+        <Results />
       </div>
     </main>
   )

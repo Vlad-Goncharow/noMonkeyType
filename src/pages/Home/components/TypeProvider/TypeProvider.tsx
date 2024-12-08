@@ -5,7 +5,7 @@ import s from './TypeProvider.module.scss'
 import TypeWrapper from '../TypeWrapper/TypeWrapper'
 
 interface TypeProviderProps {
-  children: any
+  children: React.ReactNode
 }
 
 const TypeProvider: React.FC<TypeProviderProps> = ({ children }) => {

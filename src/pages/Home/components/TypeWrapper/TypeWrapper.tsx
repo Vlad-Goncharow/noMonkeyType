@@ -6,7 +6,9 @@ interface TypeWrapperProps {
   type: 'time' | 'words'
 }
 
-const TypeWrapper: React.FC<TypeWrapperProps> = ({ type }): any => {
+const TypeWrapper: React.FC<TypeWrapperProps> = ({
+  type,
+}): JSX.Element | null => {
   if (type === 'time') {
     return <Time />
   }
@@ -14,6 +16,8 @@ const TypeWrapper: React.FC<TypeWrapperProps> = ({ type }): any => {
   if (type === 'words') {
     return <Words />
   }
+
+  return null
 }
 
 export default TypeWrapper

@@ -15,6 +15,7 @@ function Words() {
     typedWords,
     isBlured,
     setUnBlured,
+    commandLineIsOpen,
   } = React.useContext(TestContext)
 
   const { isGameEnded } = useAppSelector(getTestState)
@@ -33,7 +34,7 @@ function Words() {
   }
 
   React.useEffect(() => {
-    if (myKeyDown && !isGameEnded && !isBlured) {
+    if (myKeyDown && !isGameEnded && !isBlured && !commandLineIsOpen) {
       document.addEventListener('keydown', myKeyDown)
     }
 
@@ -54,14 +55,14 @@ function Words() {
         className='full-width highlight-letter'
         style={{ height: '200px', overflow: 'hidden' }}
       >
-        {typedCorrectWords.map((wordEl: any, wordI: any) => (
+        {typedCorrectWords.map((wordEl: string, wordI: number) => (
           <div
             key={`${wordEl}-${wordI}`}
             className={classNames('word', {
               incorrect: typedWords[wordI].join('') !== wordEl,
             })}
           >
-            {wordEl.split('').map((letterEl: any, letterI: any) => (
+            {wordEl.split('').map((letterEl: string, letterI: number) => (
               <div
                 key={`${wordI}-${letterI}`}
                 className={classNames('letter', {
@@ -80,7 +81,7 @@ function Words() {
             {typedWords[wordI].length > wordEl.length &&
               typedWords[wordI]
                 .slice(wordEl.length)
-                .map((letterEl: any, letterI: any) => (
+                .map((letterEl: string, letterI: number) => (
                   <div
                     key={`${wordI}-${letterI}`}
                     className='letter incorrect extra'
@@ -122,7 +123,7 @@ function Words() {
               wordI === typedWordIndex &&
               typedWord
                 .slice(wordEl.length)
-                .map((letterEl: any, letterI: any) => (
+                .map((letterEl: string, letterI: number) => (
                   <div
                     key={`${wordI}-${letterI}`}
                     className='letter incorrect extra'

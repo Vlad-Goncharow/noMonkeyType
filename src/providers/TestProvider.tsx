@@ -17,8 +17,10 @@ interface ITestContext {
   timeElapsed: number
   isRepeated: boolean
   isBlured: boolean
-  showedWordsArray: any
+  showedWordsArray: string[] | []
   typedWordsCount: number
+  commandLineIsOpen: boolean
+  setCommandLineIsOpen?: (bool: boolean) => void
   setUnBlured?: () => void
   setBlured?: () => void
   myKeyDown?: (e: KeyboardEvent) => void
@@ -38,6 +40,7 @@ const defaultValue: ITestContext = {
   isRepeated: false,
   isBlured: false,
   typedWordsCount: 0,
+  commandLineIsOpen: false,
 }
 
 export const TestContext = createContext<ITestContext>(defaultValue)
@@ -56,24 +59,27 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
 
   const [isBlured, setIsBlured] = React.useState(false)
   const [typedLetterIndex, setTypedLetterIndex] = React.useState<number>(0)
-  const [showedWordsArray, setShowedWordsArray] = React.useState<any>(wordsList)
-  const [typedWord, setTypedWord] = React.useState<any>([])
-  const [typedWords, setTypedWords] = React.useState<any>([])
-  const [typedCorrectWords, setTypedCorrectWords] = React.useState<any>([])
+  const [showedWordsArray, setShowedWordsArray] = React.useState<string[] | []>(
+    wordsList
+  )
+  const [typedWord, setTypedWord] = React.useState<string[]>([])
+  const [typedWords, setTypedWords] = React.useState<string[][]>([])
+  const [typedCorrectWords, setTypedCorrectWords] = React.useState<string[]>([])
   const [errors, setErrors] = React.useState<number>(0)
   const [timeElapsed, setTimeElapsed] = React.useState<number>(0)
   const [isRepeated, setIsRepeated] = React.useState<boolean>(false)
   const [typedWordsCount, setTypedWordsCount] = React.useState(0)
+  const [commandLineIsOpen, setCommandLineIsOpen] = React.useState(false)
 
   React.useEffect(() => {
     const countLetterErrors = (): number => {
       let errors = 0
 
-      typedCorrectWords.forEach((word: any, wordI: any) => {
+      typedCorrectWords.forEach((word: string, wordI: number) => {
         word
           .split('')
           .slice(0, typedWords[wordI].length)
-          .forEach((letter: any, letterI: any) => {
+          .forEach((letter: string, letterI: number) => {
             if (letter !== typedWords[wordI][letterI]) {
               errors += 1
             }
@@ -81,7 +87,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       })
 
       if (showedWordsArray.length > 0) {
-        typedWord.forEach((letter: any, i: any) => {
+        typedWord.forEach((letter: string, i: number) => {
           if (
             letter !==
               showedWordsArray[0].split('').slice(0, typedWord.length)[i] &&
@@ -111,10 +117,10 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     const wordsEL = document.querySelector('#words') as Element
     // Если нажат пробел - сразу обрабатываем его
     if (e.key === ' ' && typedWord.length > 0) {
-      setTypedWords((prev: any) => [...prev, typedWord])
+      setTypedWords((prev) => [...prev, typedWord])
       setTypedLetterIndex(0)
-      setTypedCorrectWords((prev: any) => [...prev, showedWordsArray[0]])
-      setShowedWordsArray((prev: any) => prev.slice(1))
+      setTypedCorrectWords((prev: string[]) => [...prev, showedWordsArray[0]])
+      setShowedWordsArray((prev) => prev.slice(1))
 
       if (typedWord.length < showedWordsArray[0].length) {
         dispatch(TestResultsActions.updateMised())
@@ -134,8 +140,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       )
 
       if (wordsSeePercentage < 75 && typedWords.length > wordsByPerocentage) {
-        setTypedCorrectWords((prev: any) => prev.slice(wordsByPerocentage))
-        setTypedWords((prev: any) => prev.slice(wordsByPerocentage))
+        setTypedCorrectWords((prev) => prev.slice(wordsByPerocentage))
+        setTypedWords((prev) => prev.slice(wordsByPerocentage))
       }
 
       return
@@ -171,8 +177,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         setErrors((prev) => prev + 1)
       }
 
-      setTypedWord((prev: any) => [...prev, e.key])
-      setTypedLetterIndex((prev: any) => prev + 1)
+      setTypedWord((prev) => [...prev, e.key])
+      setTypedLetterIndex((prev) => prev + 1)
 
       if (typedWord.length >= showedWordsArray[0].length) {
         dispatch(TestResultsActions.updateExtra())
@@ -185,8 +191,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       let lastTypedCorrectStr = typedCorrectWords[typedCorrectWords.length - 1]
 
       if (typedWord.length > 0) {
-        setTypedWord((prev: any) => prev.slice(0, typedWord.length - 1))
-        setTypedLetterIndex((prev: any) => (prev > 0 ? prev - 1 : prev))
+        setTypedWord((prev) => prev.slice(0, typedWord.length - 1))
+        setTypedLetterIndex((prev) => (prev > 0 ? prev - 1 : prev))
       }
 
       if (
@@ -194,15 +200,15 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         typedWords.length > 0 &&
         lastTypedWordStr !== lastTypedCorrectStr
       ) {
-        setShowedWordsArray((prev: any) => [
+        setShowedWordsArray((prev) => [
           typedCorrectWords[typedCorrectWords.length - 1],
           ...prev,
         ])
         setTypedWord(typedWords[typedWords.length - 1])
-        setTypedCorrectWords((prev: any) => prev.slice(0, prev.length - 1))
+        setTypedCorrectWords((prev) => prev.slice(0, prev.length - 1))
 
         setTypedLetterIndex(typedWords[typedWords.length - 1].length)
-        setTypedWords((prev: any) => prev.slice(0, prev.length - 1))
+        setTypedWords((prev) => prev.slice(0, prev.length - 1))
       }
     }
 
@@ -312,7 +318,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   React.useEffect(() => {
     if (isGameStarted && !isGameEnded && setTimeElapsed) {
       const interval = setInterval(() => {
-        setTimeElapsed((prev: any) => prev + 1)
+        setTimeElapsed((prev) => prev + 1)
       }, 1000)
 
       return () => clearInterval(interval)
@@ -335,6 +341,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         isRepeated,
         isBlured,
         typedWordsCount,
+        commandLineIsOpen,
+        setCommandLineIsOpen,
         setUnBlured,
         setBlured,
         myKeyDown,

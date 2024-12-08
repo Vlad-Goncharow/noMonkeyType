@@ -13,7 +13,7 @@ function useTheme() {
       document.documentElement.style.removeProperty(varName)
     })
 
-    let themeLink: any = document.getElementById('currentTheme')
+    let themeLink = document.getElementById('currentTheme') as HTMLLinkElement
 
     if (!themeLink) {
       themeLink = document.createElement('link')
