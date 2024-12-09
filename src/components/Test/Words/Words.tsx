@@ -16,6 +16,7 @@ function Words() {
     isBlured,
     setUnBlured,
     commandLineIsOpen,
+    mobileTestConfigIsOpen,
   } = React.useContext(TestContext)
 
   const { isGameEnded } = useAppSelector(getTestState)
@@ -34,7 +35,13 @@ function Words() {
   }
 
   React.useEffect(() => {
-    if (myKeyDown && !isGameEnded && !isBlured && !commandLineIsOpen) {
+    if (
+      myKeyDown &&
+      !isGameEnded &&
+      !isBlured &&
+      !commandLineIsOpen &&
+      !mobileTestConfigIsOpen
+    ) {
       document.addEventListener('keydown', myKeyDown)
     }
 

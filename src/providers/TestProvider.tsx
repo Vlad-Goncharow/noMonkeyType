@@ -20,6 +20,8 @@ interface ITestContext {
   showedWordsArray: string[] | []
   typedWordsCount: number
   commandLineIsOpen: boolean
+  mobileTestConfigIsOpen: boolean
+  setMobileTestConfigIsOpen?: (bool: boolean) => void
   setCommandLineIsOpen?: (bool: boolean) => void
   setUnBlured?: () => void
   setBlured?: () => void
@@ -41,6 +43,7 @@ const defaultValue: ITestContext = {
   isBlured: false,
   typedWordsCount: 0,
   commandLineIsOpen: false,
+  mobileTestConfigIsOpen: false,
 }
 
 export const TestContext = createContext<ITestContext>(defaultValue)
@@ -70,6 +73,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   const [isRepeated, setIsRepeated] = React.useState<boolean>(false)
   const [typedWordsCount, setTypedWordsCount] = React.useState(0)
   const [commandLineIsOpen, setCommandLineIsOpen] = React.useState(false)
+  const [mobileTestConfigIsOpen, setMobileTestConfigIsOpen] =
+    React.useState<boolean>(false)
 
   React.useEffect(() => {
     const countLetterErrors = (): number => {
@@ -342,6 +347,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         isBlured,
         typedWordsCount,
         commandLineIsOpen,
+        mobileTestConfigIsOpen,
+        setMobileTestConfigIsOpen,
         setCommandLineIsOpen,
         setUnBlured,
         setBlured,

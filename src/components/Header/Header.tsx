@@ -15,11 +15,11 @@ import {
 function Header() {
   return (
     <header>
-      <Link to={'/'} className={s.logo}>
+      <Link to={'/'} id='logo'>
         <div className={s.logo__icon}>
           <FavoriteSvg />
         </div>
-        <h1> noMonkeyType </h1>
+        <h1 className='text'> noMonkeyType </h1>
       </Link>
       <nav>
         <Link to={'/'} className='textButton'>

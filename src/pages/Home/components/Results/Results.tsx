@@ -4,7 +4,6 @@ import { getTestResultData } from '../../../../redux/slices/TestResult/selectors
 import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
 import ChartResults from './components/ChartResults/ChartResults'
 import Controls from './components/Controls/Controls'
-import s from './Results.module.scss'
 import React from 'react'
 import { TestContext } from '../../../../providers/TestProvider'
 import { getTestState } from '../../../../redux/slices/TestState/selectors'
@@ -41,66 +40,66 @@ function Results() {
 
   return (
     <div
+      id='result'
       className={classNames('content-grid full-width', {
         hidden:
           (!isGameStarted && !isGameEnded) || (isGameStarted && !isGameEnded),
       })}
     >
-      <div className={s.wrapper}>
-        <div className={s.stats}>
-          <div className={classNames(s.grop, s.wpm)}>
-            <div className={s.top}>wpm</div>
+      <div className='wrapper'>
+        <div className='stats'>
+          <div className='group wpm'>
+            <div className='top'>wpm</div>
             <div
               aria-label={`${Math.round(averageWPM)} wpm`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {Math.round(averageWPM)}
             </div>
           </div>
-          <div className={classNames(s.grop, s.acc)}>
-            <div className={s.top}>acc</div>
+          <div className='group acc'>
+            <div className='top'>acc</div>
             <div
               aria-label={`${Math.round((typedCorrectCharacters / typedCharacters) * 100)}% accuracy`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {Math.round((typedCorrectCharacters / typedCharacters) * 100)}%
             </div>
           </div>
         </div>
-        <div className={classNames(s.stats, s.morestats)}>
-          <div className={classNames(s.group, s.testType)}>
-            <div className={s.top}>testType</div>
-            <div className={s.bottom}>{type}</div>
+        <div className='stats morestats'>
+          <div className='group testType'>
+            <div className='top'>testType</div>
+            <div className='bottom'>{type}</div>
           </div>
           {isRepeated && (
-            <div className={classNames(s.group, s.info)}>
-              <div className={s.top}>other</div>
-              <div className={s.bottom}>repeat</div>
+            <div className='group info'>
+              <div className='top'>other</div>
+              <div className='bottom'>repeat</div>
             </div>
           )}
-
-          <div className={classNames(s.group, s.raw)}>
-            <div className={s.top}>raw</div>
+          <div className='group raw'>
+            <div className='top'>raw</div>
             <div
               aria-label={`${Math.round(avarageRaw)} wpm`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {Math.round(avarageRaw)}
             </div>
           </div>
-          <div className={classNames(s.group, s.key)}>
-            <div className={s.top}>characters</div>
+          <div className='group key'>
+            <div className='top'>characters</div>
             <div
               aria-label={`correct, incorrect, extra, and missed`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {typedCorrectCharacters +
                 '/' +
@@ -111,35 +110,42 @@ function Results() {
                 missed}
             </div>
           </div>
-          <div className={classNames(s.group, s.consistency)}>
-            <div className={s.top}>consistency</div>
+          <div className='group flat consistency'>
+            <div className='top'>consistency</div>
             <div
               aria-label={`${Math.round(consistency * 100) / 100}%`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {Math.round((consistency * 100) / 100)}%
             </div>
           </div>
-          <div className={classNames(s.group, s.time)}>
-            <div className={s.top}>time</div>
+          <div className='group time'>
+            <div className='top'>time</div>
             <div
               aria-label={`${time}s`}
               data-balloon-break
               data-balloon-pos='up'
-              className={s.bottom}
+              className='bottom'
             >
               {time}s
             </div>
           </div>
         </div>
-        <div className={s.chart}>
+        <div className='chart'>
           <ChartResults />
         </div>
-        <div className={s.bottom}>
+        <div className='bottom'>
           <Controls />
         </div>
+        <div className='loginTip'>
+          <a href='/login' router-link=''>
+            Sign in
+          </a>
+          to save your result
+        </div>
+        <div className='ssWatermark hidden'>monkeytype.com</div>
       </div>
     </div>
   )

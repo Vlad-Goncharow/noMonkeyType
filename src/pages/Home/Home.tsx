@@ -12,6 +12,7 @@ import Overflow from './components/Overflow/Overflow'
 import classNames from 'classnames'
 import { getTestState } from '../../redux/slices/TestState/selectors'
 import CupsLockWarning from './components/CupsLockWarning/CupsLockWarning'
+import MobileTestConfigModal from '../../components/MobileTestConfigModal/MobileTestConfigModal'
 
 function Home() {
   const { words, numbers, punctuation } = useAppSelector(getTestConfig)
@@ -38,6 +39,7 @@ function Home() {
     <main className={'full-width content-grid'} style={{ height: '100%' }}>
       <div className={'page pageTest full-width content-grid active'}>
         <TestSettings />
+        <MobileTestConfigModal />
         <div
           id='typingTest'
           className={classNames('content-grid content', {

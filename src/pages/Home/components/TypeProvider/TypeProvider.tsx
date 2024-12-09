@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAppSelector } from '../../../../hooks/useAppSelector'
 import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
-import s from './TypeProvider.module.scss'
 import TypeWrapper from '../TypeWrapper/TypeWrapper'
 
 interface TypeProviderProps {
