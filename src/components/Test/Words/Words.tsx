@@ -17,6 +17,7 @@ function Words() {
     setUnBlured,
     commandLineIsOpen,
     mobileTestConfigIsOpen,
+    inputRef,
   } = React.useContext(TestContext)
 
   const { isGameEnded } = useAppSelector(getTestState)
@@ -54,6 +55,12 @@ function Words() {
     }
   }, [myKeyDown, isBlured])
 
+  const handleFocus = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus()
+    }
+  }
+
   return (
     <>
       <div
@@ -61,6 +68,7 @@ function Words() {
         id='words'
         className='full-width highlight-letter'
         style={{ height: '200px', overflow: 'hidden' }}
+        onClick={handleFocus}
       >
         {typedCorrectWords.map((wordEl: string, wordI: number) => (
           <div

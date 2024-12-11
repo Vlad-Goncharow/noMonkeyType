@@ -21,11 +21,14 @@ interface ITestContext {
   typedWordsCount: number
   commandLineIsOpen: boolean
   mobileTestConfigIsOpen: boolean
+  inputRef?: React.RefObject<HTMLInputElement>
+  wordsInput?: string
   setMobileTestConfigIsOpen?: (bool: boolean) => void
   setCommandLineIsOpen?: (bool: boolean) => void
   setUnBlured?: () => void
   setBlured?: () => void
   myKeyDown?: (e: KeyboardEvent) => void
+  handleInputWords?: (e: React.ChangeEvent<HTMLInputElement>) => void
   calcRes?: () => void
   newGame?: () => void
   repeat?: () => void
@@ -75,6 +78,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   const [commandLineIsOpen, setCommandLineIsOpen] = React.useState(false)
   const [mobileTestConfigIsOpen, setMobileTestConfigIsOpen] =
     React.useState<boolean>(false)
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
+  const [wordsInput, setWordsInput] = React.useState('')
 
   React.useEffect(() => {
     const countLetterErrors = (): number => {
@@ -118,13 +123,19 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     }
   }, [wordsList])
 
-  const myKeyDown = (e: KeyboardEvent) => {
+  const handleInputWords = (e: React.ChangeEvent<HTMLInputElement>) => {
     const wordsEL = document.querySelector('#words') as Element
-    // Если нажат пробел - сразу обрабатываем его
-    if (e.key === ' ' && typedWord.length > 0) {
+
+    const value = e.target.value
+    const firstLetter = value.split('')[0]
+    const lastTypedChar = value[value.length - 1]
+
+    if (lastTypedChar === ' ' && typedWord.length > 0) {
+      setWordsInput('')
+
       setTypedWords((prev) => [...prev, typedWord])
       setTypedLetterIndex(0)
-      setTypedCorrectWords((prev: string[]) => [...prev, showedWordsArray[0]])
+      setTypedCorrectWords((prev) => [...prev, showedWordsArray[0]])
       setShowedWordsArray((prev) => prev.slice(1))
 
       if (typedWord.length < showedWordsArray[0].length) {
@@ -132,8 +143,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       }
 
       setTypedWord([])
-
-      //Deletes already typed words to show those that are hidden because of the height of 200 px
       setTypedWordsCount((prev) => prev + 1)
 
       //A percentage of the part of the words you can see
@@ -152,42 +161,49 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       return
     }
 
-    let charCode = e.keyCode
-    const isLetterOrNumber =
-      punctuationList.includes(e.key) ||
-      (charCode >= 48 && charCode <= 57) ||
-      (charCode >= 65 && charCode <= 90) ||
-      (charCode >= 97 && charCode <= 122) ||
-      (charCode >= 1040 && charCode <= 1103)
-
-    if (
-      e.key !== ' ' &&
-      isLetterOrNumber &&
-      !isGameStarted &&
-      time !== timeElapsed
-    ) {
+    if (firstLetter !== ' ' && !isGameStarted && time !== timeElapsed) {
       dispatch(testStateActions.changeIsGameIsStarded(true))
     }
 
-    if (e.key !== ' ' && isLetterOrNumber && showedWordsArray) {
-      dispatch(TestResultsActions.updateTypedCharacters())
-      if (e.key === showedWordsArray[0][typedLetterIndex]) {
-        dispatch(TestResultsActions.updateTypedCorrectCharacters())
-      }
+    if (firstLetter !== ' ') {
+      const currentChar = showedWordsArray[0][typedLetterIndex]
 
-      if (
-        e.key !== showedWordsArray[0][typedLetterIndex] &&
-        showedWordsArray[0].length > 0
-      ) {
+      if (lastTypedChar === currentChar) {
+        dispatch(TestResultsActions.updateTypedCorrectCharacters())
+      } else {
         setErrors((prev) => prev + 1)
       }
 
-      setTypedWord((prev) => [...prev, e.key])
-      setTypedLetterIndex((prev) => prev + 1)
+      setWordsInput(value)
+      dispatch(TestResultsActions.updateTypedCharacters())
+      setTypedWord(value.split(''))
+      setTypedLetterIndex(value.length)
+    }
 
-      if (typedWord.length >= showedWordsArray[0].length) {
-        dispatch(TestResultsActions.updateExtra())
-      }
+    if (typedWord.length >= showedWordsArray[0].length) {
+      dispatch(TestResultsActions.updateExtra())
+    }
+
+    //prevent user wrote all available words
+    if (
+      typedWords.length === typedCorrectWords.length &&
+      showedWordsArray.length === 1 &&
+      type !== 'words'
+    ) {
+      let str = generateText(40, false).split(' ')
+      dispatch(
+        testStateActions.setWordsList([
+          ...typedCorrectWords,
+          ...showedWordsArray,
+          ...str,
+        ])
+      )
+    }
+  }
+
+  const myKeyDown = (e: KeyboardEvent) => {
+    if (e.ctrlKey && e.key === 'z') {
+      e.preventDefault()
     }
 
     if (e.key === 'Backspace') {
@@ -209,28 +225,18 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
           typedCorrectWords[typedCorrectWords.length - 1],
           ...prev,
         ])
-        setTypedWord(typedWords[typedWords.length - 1])
+
+        let lastWord = typedWords[typedWords.length - 1]
+        setTypedWord(lastWord)
         setTypedCorrectWords((prev) => prev.slice(0, prev.length - 1))
 
-        setTypedLetterIndex(typedWords[typedWords.length - 1].length)
+        setTypedLetterIndex(lastWord.length)
         setTypedWords((prev) => prev.slice(0, prev.length - 1))
-      }
-    }
+        setWordsInput([...lastWord, lastWord[lastWord.length - 1]].join(''))
 
-    //prevent user wrote all available words
-    if (
-      typedWords.length === typedCorrectWords.length &&
-      showedWordsArray.length === 1 &&
-      type !== 'words'
-    ) {
-      let str = generateText(40, false).split(' ')
-      dispatch(
-        testStateActions.setWordsList([
-          ...typedCorrectWords,
-          ...showedWordsArray,
-          ...str,
-        ])
-      )
+        //for words mode
+        setTypedWordsCount((prev) => prev - 1)
+      }
     }
   }
 
@@ -281,8 +287,17 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   }
   const setUnBlured = () => {
     setIsBlured(false)
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
     document.body.style.cursor = ''
   }
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
 
   const clearAll = () => {
     setTypedWord([])
@@ -293,6 +308,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     setTypedLetterIndex(0)
     setTypedWordsCount(0)
     dispatch(TestResultsActions.clearAll())
+    setWordsInput('')
   }
 
   const newGame = () => {
@@ -345,14 +361,17 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         showedWordsArray,
         isRepeated,
         isBlured,
+        inputRef,
         typedWordsCount,
         commandLineIsOpen,
         mobileTestConfigIsOpen,
+        wordsInput,
         setMobileTestConfigIsOpen,
         setCommandLineIsOpen,
         setUnBlured,
         setBlured,
         myKeyDown,
+        handleInputWords,
         calcRes,
         newGame,
         repeat,

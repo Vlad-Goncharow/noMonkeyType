@@ -11,11 +11,13 @@ import {
   faKeyboard,
   faUser,
 } from '@fortawesome/free-solid-svg-icons'
+import { TestContext } from '../../providers/TestProvider'
 
 function Header() {
+  const { newGame } = React.useContext(TestContext)
   return (
     <header>
-      <Link to={'/'} id='logo'>
+      <Link onClick={newGame} to={'/'} id='logo'>
         <div className={s.logo__icon}>
           <FavoriteSvg />
         </div>

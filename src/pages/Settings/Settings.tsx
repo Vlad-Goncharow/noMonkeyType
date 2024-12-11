@@ -40,6 +40,30 @@ const Settings = () => {
     'theme',
     'hideElements',
   ])
+  const [scrollBtnIsShow, setScrollBtnIsShow] = React.useState(false)
+
+  React.useEffect(() => {
+    const myScroll = () => {
+      if (window.scrollY > 100) {
+        setScrollBtnIsShow(true)
+      } else {
+        setScrollBtnIsShow(false)
+      }
+    }
+
+    window.addEventListener('scroll', myScroll)
+
+    return () => {
+      window.removeEventListener('scroll', myScroll)
+    }
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
+  }
 
   const changeActiveSection = (e: React.MouseEvent<HTMLElement>) => {
     const group = e.currentTarget.getAttribute('data-gruop') as Section
@@ -104,7 +128,12 @@ const Settings = () => {
           changeActiveSection,
         }}
       >
-        <div className='scrollToTopButton invisible'>
+        <div
+          onClick={scrollToTop}
+          className={classNames('scrollToTopButton', {
+            invisible: !scrollBtnIsShow,
+          })}
+        >
           <FontAwesomeIcon icon={faAnglesUp} />
         </div>
         <div className='tip'>
