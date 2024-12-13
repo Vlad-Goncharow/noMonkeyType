@@ -6,7 +6,7 @@ import { useAppDispatch } from '../hooks/useAppDispatch'
 import { TestResultsActions } from '../redux/slices/TestResult'
 import { getTestConfig } from '../redux/slices/TestConfig/selectors'
 import { testStateActions } from '../redux/slices/TestState'
-import { generateText, punctuationList } from '../utils/wordsGenerator'
+import { generateText } from '../utils/wordsGenerator'
 import { getTestResultData } from '../redux/slices/TestResult/selectors'
 
 interface ITestContext {
@@ -29,7 +29,6 @@ interface ITestContext {
   setBlured?: () => void
   myKeyDown?: (e: KeyboardEvent) => void
   handleInputWords?: (e: React.ChangeEvent<HTMLInputElement>) => void
-  calcRes?: () => void
   newGame?: () => void
   repeat?: () => void
   clearAll?: () => void
@@ -53,6 +52,11 @@ export const TestContext = createContext<ITestContext>(defaultValue)
 
 interface ITestProvider {
   children: JSX.Element
+}
+
+type calcErrorsExtraType = {
+  extra: number
+  errors: number
 }
 
 export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
@@ -82,10 +86,15 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   const [wordsInput, setWordsInput] = React.useState('')
 
   React.useEffect(() => {
-    const countLetterErrors = (): number => {
+    const calcErrorsExtra = (): calcErrorsExtraType => {
       let errors = 0
+      let extra = 0
 
       typedCorrectWords.forEach((word: string, wordI: number) => {
+        if (word.length < typedWords[wordI].length) {
+          extra += typedWords[wordI].length - word.length
+        }
+
         word
           .split('')
           .slice(0, typedWords[wordI].length)
@@ -98,9 +107,12 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
 
       if (showedWordsArray.length > 0) {
         typedWord.forEach((letter: string, i: number) => {
+          if (i > showedWordsArray[0].length - 1) {
+            extra += 1
+          }
+
           if (
-            letter !==
-              showedWordsArray[0].split('').slice(0, typedWord.length)[i] &&
+            letter !== showedWordsArray[0].split('')[i] &&
             i < showedWordsArray[0].length
           ) {
             errors += 1
@@ -108,10 +120,13 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         })
       }
 
-      return errors
+      return { errors, extra }
     }
 
-    dispatch(TestResultsActions.updateIncorrect(countLetterErrors()))
+    const { errors, extra } = calcErrorsExtra()
+
+    dispatch(TestResultsActions.updateExtra(extra))
+    dispatch(TestResultsActions.updateIncorrect(errors))
   }, [typedWords, typedCorrectWords, typedWord, showedWordsArray])
 
   React.useEffect(() => {
@@ -180,10 +195,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       setTypedLetterIndex(value.length)
     }
 
-    if (typedWord.length >= showedWordsArray[0].length) {
-      dispatch(TestResultsActions.updateExtra())
-    }
-
     //prevent user wrote all available words
     if (
       typedWords.length === typedCorrectWords.length &&
@@ -240,7 +251,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     }
   }
 
-  const calcRes = () => {
+  const calcRes = React.useCallback(() => {
     if (timeElapsed > 0) {
       const wpm = Math.round(
         (typedCorrectCharacters || 0) / 5 / (timeElapsed / 60)
@@ -260,22 +271,27 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       dispatch(TestResultsActions.updateTime(timeElapsed))
       setErrors(0)
     }
-  }
+  }, [errors, timeElapsed, typedCharacters, typedCorrectCharacters])
 
   React.useEffect(() => {
     const handeMouse = () => {
       setTimeElapsed((prev) => prev)
-      dispatch(testStateActions.changeIsGameIsStarded(false))
+
+      if (isGameStarted) {
+        dispatch(testStateActions.changeIsGameIsStarded(false))
+      }
     }
 
     if (isGameStarted) {
       document.addEventListener('mousemove', handeMouse)
       document.body.style.cursor = 'none'
     } else {
+      document.removeEventListener('mousemove', handeMouse)
       document.body.style.cursor = ''
-      return () => {
-        document.removeEventListener('mousemove', handeMouse)
-      }
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handeMouse)
     }
   }, [isGameStarted])
 
@@ -372,7 +388,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         setBlured,
         myKeyDown,
         handleInputWords,
-        calcRes,
         newGame,
         repeat,
         clearAll,

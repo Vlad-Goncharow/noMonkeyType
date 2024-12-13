@@ -31,8 +31,8 @@ const TestResultsSlice = createSlice({
     updateTypedCorrectCharacters(state) {
       state.typedCorrectCharacters = state.typedCorrectCharacters + 1
     },
-    updateExtra(state) {
-      state.extra = state.extra + 1
+    updateExtra(state, action: PayloadAction<number>) {
+      state.extra = action.payload
     },
     updateTime(state, action) {
       state.time = action.payload
