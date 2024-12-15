@@ -15,7 +15,6 @@ interface ITestContext {
   typedWord: string[]
   typedCorrectWords: string[]
   timeElapsed: number
-  isRepeated: boolean
   isBlured: boolean
   showedWordsArray: string[] | []
   typedWordsCount: number
@@ -41,7 +40,6 @@ const defaultValue: ITestContext = {
   typedCorrectWords: [],
   timeElapsed: 0,
   showedWordsArray: [],
-  isRepeated: false,
   isBlured: false,
   typedWordsCount: 0,
   commandLineIsOpen: false,
@@ -77,7 +75,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
   const [typedCorrectWords, setTypedCorrectWords] = React.useState<string[]>([])
   const [errors, setErrors] = React.useState<number>(0)
   const [timeElapsed, setTimeElapsed] = React.useState<number>(0)
-  const [isRepeated, setIsRepeated] = React.useState<boolean>(false)
   const [typedWordsCount, setTypedWordsCount] = React.useState(0)
   const [commandLineIsOpen, setCommandLineIsOpen] = React.useState(false)
   const [mobileTestConfigIsOpen, setMobileTestConfigIsOpen] =
@@ -341,7 +338,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         ).split(' ')
       )
     )
-    setIsRepeated(false)
+    dispatch(testStateActions.changeIsRepeated(false))
   }
 
   const repeat = () => {
@@ -349,7 +346,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     dispatch(testStateActions.changeIsGameIsEnded(false))
     clearAll()
     setShowedWordsArray([...wordsList])
-    setIsRepeated(true)
+    dispatch(testStateActions.changeIsRepeated(true))
   }
 
   React.useEffect(() => {
@@ -375,7 +372,6 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         typedCorrectWords,
         timeElapsed,
         showedWordsArray,
-        isRepeated,
         isBlured,
         inputRef,
         typedWordsCount,

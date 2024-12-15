@@ -11,7 +11,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useContext } from 'react'
 import { TestContext } from '../../../../../../providers/TestProvider'
 
-function Controls() {
+interface ControlsProps {
+  takeScreenshot: () => void
+}
+
+const Controls: React.FC<ControlsProps> = ({ takeScreenshot }) => {
   const { newGame, repeat } = useContext(TestContext)
 
   return (
@@ -69,6 +73,7 @@ function Controls() {
         aria-label='Copy screenshot to clipboard'
         role='button'
         data-balloon-pos='down'
+        onClick={takeScreenshot}
       >
         <FontAwesomeIcon icon={faImage} />
       </button>

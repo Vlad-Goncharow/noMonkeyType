@@ -5,12 +5,14 @@ import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
 import ChartResults from './components/ChartResults/ChartResults'
 import Controls from './components/Controls/Controls'
 import React from 'react'
-import { TestContext } from '../../../../providers/TestProvider'
 import { getTestState } from '../../../../redux/slices/TestState/selectors'
+import html2canvas from 'html2canvas'
+import themes from '../../../../utils/themes/_list.json'
 
 function Results() {
-  const { type } = useAppSelector(getTestConfig)
-  const { isGameEnded, isGameStarted } = useAppSelector(getTestState)
+  const { type, theme } = useAppSelector(getTestConfig)
+  const { isGameEnded, isGameStarted, isRepeated } =
+    useAppSelector(getTestState)
   const {
     secondStats,
     time,
@@ -21,7 +23,44 @@ function Results() {
     incorrect,
   } = useAppSelector(getTestResultData)
 
-  const { isRepeated } = React.useContext(TestContext)
+  const captureRef = React.useRef<any>()
+  const [isCaptured, setIsCaptures] = React.useState<boolean>(false)
+
+  const takeScreenshot = async () => {
+    setIsCaptures(true)
+  }
+
+  React.useEffect(() => {
+    if (isCaptured) {
+      ;(async () => {
+        try {
+          const currTheme = themes.find((el) => el.name === theme)
+
+          const canvas = await html2canvas(captureRef.current, {
+            backgroundColor: currTheme?.bgColor || '#ffffff',
+            height: captureRef.current.clientHeight + 20,
+          })
+
+          const blob = await new Promise<Blob | null>((resolve) =>
+            canvas.toBlob(resolve, 'image/png')
+          )
+
+          if (!blob) throw new Error('Create blob err')
+
+          if (navigator.clipboard && navigator.clipboard.write) {
+            const item = new ClipboardItem({ 'image/png': blob })
+            await navigator.clipboard.write([item])
+          } else {
+            throw new Error('Create blob err')
+          }
+
+          setIsCaptures(false)
+        } catch (error) {
+          console.error('copy err', error)
+        }
+      })()
+    }
+  }, [isCaptured])
 
   const wpmValues = secondStats.map((stat) => stat.wpm)
   const rawValues = secondStats.map((stat) => stat.raw)
@@ -46,7 +85,7 @@ function Results() {
           (!isGameStarted && !isGameEnded) || (isGameStarted && !isGameEnded),
       })}
     >
-      <div className='wrapper'>
+      <div ref={captureRef} className='wrapper'>
         <div className='stats'>
           <div className='group wpm'>
             <div className='top'>wpm</div>
@@ -136,16 +175,20 @@ function Results() {
         <div className='chart'>
           <ChartResults />
         </div>
-        <div className='bottom'>
-          <Controls />
-        </div>
-        <div className='loginTip'>
-          <a href='/login' router-link=''>
-            Sign in
-          </a>
-          to save your result
-        </div>
-        <div className='ssWatermark hidden'>monkeytype.com</div>
+        {!isCaptured && (
+          <>
+            <div className='bottom'>
+              <Controls takeScreenshot={takeScreenshot} />
+            </div>
+            <div className='loginTip'>
+              <a href='/login' router-link=''>
+                Sign in
+              </a>
+              to save your result
+            </div>
+            <div className='ssWatermark hidden'>monkeytype.com</div>
+          </>
+        )}
       </div>
     </div>
   )
