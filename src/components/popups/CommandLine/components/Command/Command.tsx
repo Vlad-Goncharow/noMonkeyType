@@ -2,15 +2,14 @@ import React from 'react'
 import {
   Command,
   CommandsSubgroupTitleType,
-} from '../../../../utils/commandLine/types'
+} from '../../../../../utils/commandLine/types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { TestContext } from '../../../../providers/TestProvider'
-import { useAppDispatch } from '../../../../hooks/useAppDispatch'
-import { UseClickOutside } from '../../../../hooks/UseClickOutside'
-import { useAppSelector } from '../../../../hooks/useAppSelector'
-import { getTestConfig } from '../../../../redux/slices/TestConfig/selectors'
-import { SmothCaretType } from '../../../../redux/slices/TestConfig/types/TestConfigTypes'
-import { TestConfigActions } from '../../../../redux/slices/TestConfig'
+import { TestContext } from '../../../../../providers/TestProvider'
+import { useAppDispatch } from '../../../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../../../hooks/useAppSelector'
+import { getTestConfig } from '../../../../../redux/slices/TestConfig/selectors'
+import { SmothCaretType } from '../../../../../redux/slices/TestConfig/types/TestConfigTypes'
+import { TestConfigActions } from '../../../../../redux/slices/TestConfig'
 import { debounce } from 'lodash'
 import { faCheck, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 

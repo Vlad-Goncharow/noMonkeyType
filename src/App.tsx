@@ -4,8 +4,8 @@ import Header from './components/Header/Header'
 import useConfigUpdate from './hooks/useConfigUpdate'
 import useTheme from './hooks/useTheme'
 import useCapsLock from './hooks/useCapsLock'
-import CommandLine from './components/CommandLine/CommandLine'
 import useCommandLine from './hooks/useCommandLine'
+import CommandLine from './components/popups/CommandLine/CommandLine'
 
 function App() {
   useConfigUpdate()

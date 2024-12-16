@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import HideElements from './HideElements/HideElements'
 import Caret from './Caret/Caret'
+import { Helmet } from 'react-helmet'
 
 const allowedSections = [
   'behavior',
@@ -121,139 +122,145 @@ const Settings = () => {
   }
 
   return (
-    <div className='page pageSettings full-width content-grid active'>
-      <SettingsContext.Provider
-        value={{
-          activeSection,
-          changeActiveSection,
-        }}
-      >
-        <div
-          onClick={scrollToTop}
-          className={classNames('scrollToTopButton', {
-            invisible: !scrollBtnIsShow,
-          })}
+    <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Settings | Monkeytype</title>
+      </Helmet>
+      <div className='page pageSettings full-width content-grid active'>
+        <SettingsContext.Provider
+          value={{
+            activeSection,
+            changeActiveSection,
+          }}
         >
-          <FontAwesomeIcon icon={faAnglesUp} />
-        </div>
-        <div className='tip'>
-          tip: You can also change all these settings quickly using the command
-          line (<p>ctrl/cmd</p>+<p>shift</p>+<p>p</p>
-          or
-          <p>esc</p>)
-        </div>
-
-        <div className='settingsGroup quickNav'>
-          <div className='links'>
-            <a className='textButton' href='#group_behavior'>
-              behavior
-            </a>
-            <a className='textButton' href='#group_input'>
-              input
-            </a>
-            <a className='textButton' href='#group_sound'>
-              sound
-            </a>
-            <a
-              onClick={myNavLinksScroll}
-              className='textButton'
-              href='#group_caret'
-            >
-              caret
-            </a>
-            <a className='textButton' href='#group_appearance'>
-              appearance
-            </a>
-            <a
-              onClick={myNavLinksScroll}
-              className='textButton'
-              href='#group_theme'
-            >
-              theme
-            </a>
-            <a
-              onClick={myNavLinksScroll}
-              className='textButton'
-              href='#group_hideElements'
-            >
-              hide elements
-            </a>
-            <a className='textButton' href='#group_dangerZone'>
-              danger zone
-            </a>
+          <div
+            onClick={scrollToTop}
+            className={classNames('scrollToTopButton', {
+              invisible: !scrollBtnIsShow,
+            })}
+          >
+            <FontAwesomeIcon icon={faAnglesUp} />
           </div>
-        </div>
+          <div className='tip'>
+            tip: You can also change all these settings quickly using the
+            command line (<p>ctrl/cmd</p>+<p>shift</p>+<p>p</p>
+            or
+            <p>esc</p>)
+          </div>
 
-        <div className='accountSettingsNotice'>
-          <FontAwesomeIcon icon={faUser} />
-          <p>
-            Account settings have moved. You can now access them by hovering
-            over the account button in the top right corner, then clicking
-            "Account settings".
-          </p>
-          <button className='dismissAndGo'>go to account settings</button>
-        </div>
+          <div className='settingsGroup quickNav'>
+            <div className='links'>
+              <a className='textButton' href='#group_behavior'>
+                behavior
+              </a>
+              <a className='textButton' href='#group_input'>
+                input
+              </a>
+              <a className='textButton' href='#group_sound'>
+                sound
+              </a>
+              <a
+                onClick={myNavLinksScroll}
+                className='textButton'
+                href='#group_caret'
+              >
+                caret
+              </a>
+              <a className='textButton' href='#group_appearance'>
+                appearance
+              </a>
+              <a
+                onClick={myNavLinksScroll}
+                className='textButton'
+                href='#group_theme'
+              >
+                theme
+              </a>
+              <a
+                onClick={myNavLinksScroll}
+                className='textButton'
+                href='#group_hideElements'
+              >
+                hide elements
+              </a>
+              <a className='textButton' href='#group_dangerZone'>
+                danger zone
+              </a>
+            </div>
+          </div>
 
-        <button
-          id='group_behavior'
-          onClick={changeActiveSection}
-          data-gruop='behavior'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('behavior'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          behavior
-        </button>
-        <button
-          id='group_input'
-          onClick={changeActiveSection}
-          data-gruop='input'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('input'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          input
-        </button>
-        <button
-          id='group_sound'
-          onClick={changeActiveSection}
-          data-gruop='sound'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('sound'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          sound
-        </button>
-        <Caret />
-        <button
-          id='group_appearance'
-          onClick={changeActiveSection}
-          data-gruop='appearance'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('appearance'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          appearance
-        </button>
-        <Theme />
-        <HideElements />
-        <button
-          id='group_dangerZone'
-          onClick={changeActiveSection}
-          data-gruop='dangerZone'
-          className={classNames('text sectionGroupTitle', {
-            rotateIcon: activeSection.includes('dangerZone'),
-          })}
-        >
-          <FontAwesomeIcon icon={faAngleRight} />
-          danger zone
-        </button>
-      </SettingsContext.Provider>
-    </div>
+          <div className='accountSettingsNotice'>
+            <FontAwesomeIcon icon={faUser} />
+            <p>
+              Account settings have moved. You can now access them by hovering
+              over the account button in the top right corner, then clicking
+              "Account settings".
+            </p>
+            <button className='dismissAndGo'>go to account settings</button>
+          </div>
+
+          <button
+            id='group_behavior'
+            onClick={changeActiveSection}
+            data-gruop='behavior'
+            className={classNames('text sectionGroupTitle', {
+              rotateIcon: activeSection.includes('behavior'),
+            })}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+            behavior
+          </button>
+          <button
+            id='group_input'
+            onClick={changeActiveSection}
+            data-gruop='input'
+            className={classNames('text sectionGroupTitle', {
+              rotateIcon: activeSection.includes('input'),
+            })}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+            input
+          </button>
+          <button
+            id='group_sound'
+            onClick={changeActiveSection}
+            data-gruop='sound'
+            className={classNames('text sectionGroupTitle', {
+              rotateIcon: activeSection.includes('sound'),
+            })}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+            sound
+          </button>
+          <Caret />
+          <button
+            id='group_appearance'
+            onClick={changeActiveSection}
+            data-gruop='appearance'
+            className={classNames('text sectionGroupTitle', {
+              rotateIcon: activeSection.includes('appearance'),
+            })}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+            appearance
+          </button>
+          <Theme />
+          <HideElements />
+          <button
+            id='group_dangerZone'
+            onClick={changeActiveSection}
+            data-gruop='dangerZone'
+            className={classNames('text sectionGroupTitle', {
+              rotateIcon: activeSection.includes('dangerZone'),
+            })}
+          >
+            <FontAwesomeIcon icon={faAngleRight} />
+            danger zone
+          </button>
+        </SettingsContext.Provider>
+      </div>
+    </>
   )
 }
 

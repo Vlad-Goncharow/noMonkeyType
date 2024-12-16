@@ -1,73 +1,37 @@
-import React from 'react'
-import { TestContext } from '../../providers/TestProvider'
-import { createPortal } from 'react-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
-import { useAppSelector } from '../../hooks/useAppSelector'
-import { getTestConfig } from '../../redux/slices/TestConfig/selectors'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import classNames from 'classnames'
+import React from 'react'
+import { createPortal } from 'react-dom'
 import {
   modeArray,
-  TestMode,
   timesArray,
   typesArray,
   wordsArray,
-} from '../../config/TestConfig'
-import { getTestState } from '../../redux/slices/TestState/selectors'
-import { useAppDispatch } from '../../hooks/useAppDispatch'
-import { TestConfigActions } from '../../redux/slices/TestConfig'
-import { testStateActions } from '../../redux/slices/TestState'
-import {
-  TestTime,
-  TestType,
-  TestWords,
-} from '../../redux/slices/TestConfig/types/TestConfigTypes'
-import { UseClickOutside } from '../../hooks/UseClickOutside'
+} from '../../../config/TestConfig'
+import { useAppSelector } from '../../../hooks/useAppSelector'
+import { UseClickOutside } from '../../../hooks/UseClickOutside'
+import { TestContext } from '../../../providers/TestProvider'
+import { getTestConfig } from '../../../redux/slices/TestConfig/selectors'
+import { getTestState } from '../../../redux/slices/TestState/selectors'
+import { TestConfigService } from '../../../services/TestConfigService'
 
 function MobileTestConfigModal() {
-  const dispatch = useAppDispatch()
-
   const { type, time, words, numbers, punctuation } =
     useAppSelector(getTestConfig)
   const { isGameEnded, isGameStarted } = useAppSelector(getTestState)
 
-  const { mobileTestConfigIsOpen, setMobileTestConfigIsOpen, clearAll } =
+  const { mobileTestConfigIsOpen, setMobileTestConfigIsOpen } =
     React.useContext(TestContext)
+
+  const { changeMode, changeTime, changeType, changeWords } =
+    TestConfigService()
 
   const modalRef = React.useRef<HTMLDivElement | null>(null)
   const closeCommandLine = () => {
     if (setMobileTestConfigIsOpen) setMobileTestConfigIsOpen(false)
   }
   UseClickOutside(modalRef, () => closeCommandLine())
-
-  const changeMode = (modeP: TestMode) => {
-    if (modeP === 'numbers') {
-      dispatch(TestConfigActions.changeNumbers(!numbers))
-    }
-    if (modeP === 'punctuation') {
-      dispatch(TestConfigActions.changePunctuation(!punctuation))
-    }
-
-    dispatch(testStateActions.changeIsActive(false))
-    dispatch(testStateActions.changeIsGameIsStarded(false))
-
-    if (clearAll) clearAll()
-  }
-
-  const changeType = (type: TestType) => {
-    dispatch(TestConfigActions.changeType(type))
-    dispatch(testStateActions.changeIsActive(false))
-    dispatch(testStateActions.changeIsGameIsStarded(false))
-    if (clearAll) clearAll()
-  }
-
-  const changeTime = (time: TestTime) => {
-    dispatch(TestConfigActions.changeTime(time))
-  }
-
-  const changeWords = (words: TestWords) => {
-    dispatch(TestConfigActions.changeWords(words))
-  }
 
   const openModal = () => {
     if (setMobileTestConfigIsOpen) setMobileTestConfigIsOpen(true)

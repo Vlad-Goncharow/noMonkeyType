@@ -7,8 +7,8 @@ function Overflow() {
   const blurRef = React.useRef<HTMLDivElement | null>(null)
   const { myKeyDown, setBlured, setUnBlured } = React.useContext(TestContext)
 
-  let wordsEl = document.querySelector('#words') as Element
   React.useEffect(() => {
+    let wordsEl = document.querySelector('#words') as Element
     //remove by default
     if (wordsEl && blurRef.current) {
       blurRef.current?.classList.add('hidden')

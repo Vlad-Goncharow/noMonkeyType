@@ -2,9 +2,9 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 import { createPortal } from 'react-dom'
-import { UseClickOutside } from '../../hooks/UseClickOutside'
-import { TestContext } from '../../providers/TestProvider'
-import { allCommands } from '../../utils/commandLine/lists'
+import { UseClickOutside } from '../../../hooks/UseClickOutside'
+import { TestContext } from '../../../providers/TestProvider'
+import { allCommands } from '../../../utils/commandLine/lists'
 import CommandItem from './components/Command/Command'
 
 function CommandLine() {

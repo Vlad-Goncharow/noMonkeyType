@@ -12,7 +12,8 @@ import Overflow from './components/Overflow/Overflow'
 import classNames from 'classnames'
 import { getTestState } from '../../redux/slices/TestState/selectors'
 import CupsLockWarning from './components/CupsLockWarning/CupsLockWarning'
-import MobileTestConfigModal from '../../components/MobileTestConfigModal/MobileTestConfigModal'
+import MobileTestConfigModal from '../../components/popups/MobileTestConfigModal/MobileTestConfigModal'
+import { Helmet } from 'react-helmet'
 
 function Home() {
   const { words, numbers, punctuation } = useAppSelector(getTestConfig)
@@ -36,26 +37,32 @@ function Home() {
   }, [words, numbers, punctuation, dispatch])
 
   return (
-    <main className={'full-width content-grid'} style={{ height: '100%' }}>
-      <div className={'page pageTest full-width content-grid active'}>
-        <TestSettings />
-        <MobileTestConfigModal />
-        <div
-          id='typingTest'
-          className={classNames('content-grid content', {
-            hidden: isGameEnded && !isGameStarted,
-          })}
-          style={{ maxWidth: '100%' }}
-        >
-          <CupsLockWarning />
-          <TypeProvider>
-            <Overflow />
-            <Test />
-          </TypeProvider>
+    <>
+      <Helmet>
+        <meta charSet='utf-8' />
+        <title>Monkeytype | A minimalistic, customizable typing test</title>
+      </Helmet>
+      <main className={'full-width content-grid'} style={{ height: '100%' }}>
+        <div className={'page pageTest full-width content-grid active'}>
+          <TestSettings />
+          <MobileTestConfigModal />
+          <div
+            id='typingTest'
+            className={classNames('content-grid content', {
+              hidden: isGameEnded && !isGameStarted,
+            })}
+            style={{ maxWidth: '100%' }}
+          >
+            <CupsLockWarning />
+            <TypeProvider>
+              <Overflow />
+              <Test />
+            </TypeProvider>
+          </div>
+          <Results />
         </div>
-        <Results />
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 
