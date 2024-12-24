@@ -9,6 +9,7 @@ const initialState: TestResultsType = {
   typedCharacters: 0,
   typedCorrectCharacters: 0,
   incorrect: 0,
+  replayIsOpen: false,
 }
 
 const TestResultsSlice = createSlice({
@@ -43,6 +44,9 @@ const TestResultsSlice = createSlice({
     updateIncorrect(state, action: PayloadAction<number>) {
       state.incorrect = action.payload
     },
+    changeReplayIsOpen(state, action: PayloadAction<boolean>) {
+      state.replayIsOpen = action.payload
+    },
     clearAll(state) {
       state.extra = 0
       state.missed = 0
@@ -51,6 +55,7 @@ const TestResultsSlice = createSlice({
       state.typedCharacters = 0
       state.typedCorrectCharacters = 0
       state.incorrect = 0
+      state.replayIsOpen = false
     },
   },
 })

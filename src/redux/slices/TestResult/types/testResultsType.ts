@@ -6,6 +6,7 @@ export interface TestResultsType {
   extra: number
   missed: number
   incorrect: number
+  replayIsOpen: boolean
 }
 
 export interface secondStatsType {

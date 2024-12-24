@@ -705,20 +705,21 @@
         .word {
           position: relative;
           margin: 0.18rem 0.6rem 0.15rem 0;
-          & letter.corrected {
+          font-size: 1rem;
+          .corrected {
             color: var(--text-color);
             border-bottom: 2px dotted var(--main-color);
           }
-          & letter.extraCorrected {
+          .extraCorrected {
             border-right: 2px dotted var(--main-color);
           }
-          & letter.correct {
+          .correct {
             color: var(--text-color);
           }
-          & letter.incorrect {
+          .incorrect {
             color: var(--error-color);
           }
-          & letter.incorrect.extra {
+          .incorrect.extra {
             color: var(--error-extra-color);
           }
           &.heatmapInherit letter {

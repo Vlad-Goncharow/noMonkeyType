@@ -8,6 +8,7 @@ import React from 'react'
 import { getTestState } from '../../../../redux/slices/TestState/selectors'
 import html2canvas from 'html2canvas'
 import themes from '../../../../utils/themes/_list.json'
+import Replay from './components/Replay/Replay'
 
 function Results() {
   const { type, theme } = useAppSelector(getTestConfig)
@@ -21,6 +22,7 @@ function Results() {
     typedCorrectCharacters,
     missed,
     incorrect,
+    replayIsOpen,
   } = useAppSelector(getTestResultData)
 
   const captureRef = React.useRef<any>()
@@ -178,6 +180,7 @@ function Results() {
         {!isCaptured && (
           <>
             <div className='bottom'>
+              {replayIsOpen && <Replay />}
               <Controls takeScreenshot={takeScreenshot} />
             </div>
             <div className='loginTip'>

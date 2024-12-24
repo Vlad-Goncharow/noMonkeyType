@@ -9,6 +9,11 @@ import { testStateActions } from '../redux/slices/TestState'
 import { generateText } from '../utils/wordsGenerator'
 import { getTestResultData } from '../redux/slices/TestResult/selectors'
 
+export interface lettersDelay {
+  second: number
+  letter: string
+}
+
 interface ITestContext {
   typedLetterIndex: number
   typedWords: string[][]
@@ -22,6 +27,7 @@ interface ITestContext {
   mobileTestConfigIsOpen: boolean
   inputRef?: React.RefObject<HTMLInputElement>
   wordsInput?: string
+  lettersDelay?: lettersDelay[][]
   setMobileTestConfigIsOpen?: (bool: boolean) => void
   setCommandLineIsOpen?: (bool: boolean) => void
   setUnBlured?: () => void
@@ -81,6 +87,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     React.useState<boolean>(false)
   const inputRef = React.useRef<HTMLInputElement | null>(null)
   const [wordsInput, setWordsInput] = React.useState('')
+  const [lettersDelay, setLettersDelay] = React.useState<lettersDelay[][]>([])
 
   React.useEffect(() => {
     const calcErrorsExtra = (): calcErrorsExtraType => {
@@ -135,6 +142,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     }
   }, [wordsList])
 
+  const [delayArr, setDelayArr] = React.useState<lettersDelay[]>([])
   const handleInputWords = (e: React.ChangeEvent<HTMLInputElement>) => {
     const wordsEL = document.querySelector('#words') as Element
 
@@ -146,6 +154,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       setWordsInput('')
 
       setTypedWords((prev) => [...prev, typedWord])
+      setLettersDelay((prev: any) => [...prev, delayArr])
       setTypedLetterIndex(0)
       setTypedCorrectWords((prev) => [...prev, showedWordsArray[0]])
       setShowedWordsArray((prev) => prev.slice(1))
@@ -154,6 +163,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         dispatch(TestResultsActions.updateMised())
       }
 
+      setDelayArr([])
       setTypedWord([])
       setTypedWordsCount((prev) => prev + 1)
 
@@ -188,6 +198,10 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
 
       setWordsInput(value)
       dispatch(TestResultsActions.updateTypedCharacters())
+      setDelayArr((prev) => [
+        ...prev,
+        { second: Date.now(), letter: lastTypedChar },
+      ])
       setTypedWord(value.split(''))
       setTypedLetterIndex(value.length)
     }
@@ -322,6 +336,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     setTypedWordsCount(0)
     dispatch(TestResultsActions.clearAll())
     setWordsInput('')
+    setLettersDelay([])
+    setDelayArr([])
   }
 
   const newGame = () => {
@@ -378,6 +394,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
         commandLineIsOpen,
         mobileTestConfigIsOpen,
         wordsInput,
+        lettersDelay,
         setMobileTestConfigIsOpen,
         setCommandLineIsOpen,
         setUnBlured,

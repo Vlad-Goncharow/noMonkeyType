@@ -10,12 +10,21 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useContext } from 'react'
 import { TestContext } from '../../../../../../providers/TestProvider'
+import { useAppDispatch } from '../../../../../../hooks/useAppDispatch'
+import { useAppSelector } from '../../../../../../hooks/useAppSelector'
+import { getTestState } from '../../../../../../redux/slices/TestState/selectors'
+import { testStateActions } from '../../../../../../redux/slices/TestState'
+import { getTestResultData } from '../../../../../../redux/slices/TestResult/selectors'
+import { TestResultsActions } from '../../../../../../redux/slices/TestResult'
 
 interface ControlsProps {
   takeScreenshot: () => void
 }
 
 const Controls: React.FC<ControlsProps> = ({ takeScreenshot }) => {
+  const dispath = useAppDispatch()
+
+  const { replayIsOpen } = useAppSelector(getTestResultData)
   const { newGame, repeat } = useContext(TestContext)
 
   return (
@@ -64,6 +73,9 @@ const Controls: React.FC<ControlsProps> = ({ takeScreenshot }) => {
         aria-label='Watch replay'
         role='button'
         data-balloon-pos='down'
+        onClick={() =>
+          dispath(TestResultsActions.changeReplayIsOpen(!replayIsOpen))
+        }
       >
         <FontAwesomeIcon icon={faBackward} />
       </button>

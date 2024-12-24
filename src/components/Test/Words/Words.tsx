@@ -74,7 +74,7 @@ function Words() {
           <div
             key={`${wordEl}-${wordI}`}
             className={classNames('word', {
-              incorrect: typedWords[wordI].join('') !== wordEl,
+              error: typedWords[wordI].join('') !== wordEl,
             })}
           >
             {wordEl.split('').map((letterEl: string, letterI: number) => (
