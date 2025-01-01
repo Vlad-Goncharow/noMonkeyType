@@ -7,16 +7,18 @@ function useCapsLock() {
 
   React.useEffect(() => {
     const checkCapsLock = (event: KeyboardEvent) => {
-      dispatch(
-        testStateActions.changeIsCapsLockOn(event.getModifierState('CapsLock'))
-      )
+      if (event.key === 'CapsLock') {
+        dispatch(
+          testStateActions.changeIsCapsLockOn(
+            event.getModifierState('CapsLock')
+          )
+        )
+      }
     }
 
-    document.addEventListener('keydown', checkCapsLock)
     document.addEventListener('keyup', checkCapsLock)
 
     return () => {
-      document.removeEventListener('keydown', checkCapsLock)
       document.removeEventListener('keyup', checkCapsLock)
     }
   }, [])
