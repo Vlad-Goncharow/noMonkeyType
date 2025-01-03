@@ -25,6 +25,8 @@ class TestControllsService extends BaseService {
     this.stateService.setWordsInput('')
     this.stateService.setLettersDelay([])
     this.stateService.setDelayArr([])
+    this.stateService.setAllTypedWords([])
+    this.stateService.setAllTypedCorrectWords([])
   }
 
   newGame = (

@@ -21,6 +21,10 @@ export function useTestState(wordsList: string[]) {
     React.useState<boolean>(false)
   const [mobileTestConfigIsOpen, setMobileTestConfigIsOpen] =
     React.useState<boolean>(false)
+  const [allTypedWords, setAllTypedWords] = React.useState<string[][]>([])
+  const [allTypedCorrectWords, setAllTypedCorrectWords] = React.useState<
+    string[]
+  >([])
 
   return {
     state: {
@@ -36,6 +40,8 @@ export function useTestState(wordsList: string[]) {
       delayArr,
       commandLineIsOpen,
       mobileTestConfigIsOpen,
+      allTypedWords,
+      allTypedCorrectWords,
     },
     setters: {
       setTypedLetterIndex,
@@ -50,6 +56,8 @@ export function useTestState(wordsList: string[]) {
       setDelayArr,
       setCommandLineIsOpen,
       setMobileTestConfigIsOpen,
+      setAllTypedWords,
+      setAllTypedCorrectWords,
     },
   }
 }

@@ -33,6 +33,8 @@ interface ITestContext {
   inputRef?: React.RefObject<HTMLInputElement>
   wordsInput?: string
   lettersDelay?: lettersDelay[][]
+  allTypedWords: string[][]
+  allTypedCorrectWords: string[]
   setMobileTestConfigIsOpen: (bool: boolean) => void
   setCommandLineIsOpen: (bool: boolean) => void
   setUnBlured: () => void
@@ -55,6 +57,8 @@ const defaultValue: ITestContext = {
   typedWordsCount: 0,
   commandLineIsOpen: false,
   mobileTestConfigIsOpen: false,
+  allTypedWords: [],
+  allTypedCorrectWords: [],
   setMobileTestConfigIsOpen: () => {},
   setCommandLineIsOpen: () => {},
   setUnBlured: () => {},
@@ -92,6 +96,8 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     setTypedWords,
     setTypedWordsCount,
     setWordsInput,
+    setAllTypedWords,
+    setAllTypedCorrectWords,
   } = setters
   const {
     delayArr,
@@ -138,7 +144,9 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
     setErrors,
     setTimeElapsed,
     setTypedLetterIndex,
-    setTypedWordsCount
+    setTypedWordsCount,
+    setAllTypedWords,
+    setAllTypedCorrectWords
   )
 
   const gameService = new TestControllsService(dispatch, stateService)
@@ -152,9 +160,7 @@ export const TestProvider: React.FC<ITestProvider> = ({ children }) => {
       delayArr,
       showedWordsArray,
       isGameStarted,
-      time,
       type,
-      timeElapsed,
       typedCorrectWords,
       typedLetterIndex
     )

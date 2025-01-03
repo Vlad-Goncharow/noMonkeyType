@@ -22,7 +22,7 @@ function Replay() {
   const intervalTimer = React.useRef<NodeJS.Timeout | null>(null)
 
   const { secondStats } = useAppSelector(getTestResultData)
-  const { typedWords, typedCorrectWords, lettersDelay } =
+  const { lettersDelay, allTypedWords, allTypedCorrectWords } =
     React.useContext(TestContext)
 
   //An array that will show the replay
@@ -31,8 +31,8 @@ function Replay() {
 
   //array with all letters with time
   const timesRef = React.useRef<lettersDelay[][]>([[]])
-  // copy typedWords
-  const copyRef = React.useRef([...typedWords])
+  // copy allTypedWords
+  const copyRef = React.useRef([...allTypedWords])
 
   const [timeElapsed, setTimeElapsed] = React.useState(0)
 
@@ -115,37 +115,37 @@ function Replay() {
         timersRef.current.forEach((el) => clearTimeout(el))
       }
     }
-  }, [typedWords, isPlayed])
+  }, [allTypedWords, isPlayed])
 
-  //if showed words === typedWords restart replay
+  //if showed words === allTypedWords restart replay
   const handlePlayed = () => {
     setIsPlayed((prev) => {
-      if (!prev && typedWords.length === showedWords.length) {
+      if (!prev && allTypedWords.length === showedWords.length) {
         setShowedWords([])
         calcTimes()
         setTimeElapsed(0)
-        copyRef.current = [...typedWords]
+        copyRef.current = [...allTypedWords]
       }
       return !prev
     })
   }
 
-  //default copy typedWords and calc times
+  //default copy allTypedWords and calc times
   React.useEffect(() => {
-    copyRef.current = [...typedWords]
+    copyRef.current = [...allTypedWords]
     calcTimes()
-  }, [calcTimes, typedWords])
+  }, [calcTimes, allTypedWords])
 
-  //if showed words === typedWords stop replay
+  //if showed words === allTypedWords stop replay
   React.useEffect(() => {
     if (
-      typedWords.length === showedWords.length &&
-      typedWords[typedWords.length - 1].length ===
+      allTypedWords.length === showedWords.length &&
+      allTypedWords[allTypedWords.length - 1].length ===
         showedWords[showedWords.length - 1].length
     ) {
       setIsPlayed(false)
     }
-  }, [typedWords, showedWords])
+  }, [allTypedWords, showedWords])
 
   //timer
   React.useEffect(() => {
@@ -180,18 +180,18 @@ function Replay() {
       </div>
       <div id='wordsWrapper'>
         <div id='replayWords' className='words'>
-          {typedCorrectWords.map((word, wordI) => (
+          {allTypedWords.map((word, wordI) => (
             <div
               className={classNames('word', {
                 error:
                   showedWords[wordI] !== undefined &&
-                  showedWords[wordI] !== word &&
+                  allTypedCorrectWords[wordI] !== word.join('') &&
                   showedWords[wordI + 1] !== undefined &&
                   showedWords[wordI + 1].length > 0,
               })}
               key={`${word},${wordI}`}
             >
-              {word.split('').map((letter, letterI) => (
+              {word.map((letter, letterI) => (
                 <div
                   key={`${letter},${letterI}`}
                   className={classNames('letter', {
@@ -203,7 +203,7 @@ function Replay() {
                       (showedWords[wordI].length - 1 === letterI ||
                         showedWords[wordI].length > letterI) &&
                       showedWords[wordI][letterI] !==
-                        typedCorrectWords[wordI][letterI],
+                        allTypedCorrectWords[wordI][letterI],
                   })}
                 >
                   {letter}

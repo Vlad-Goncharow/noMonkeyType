@@ -3,17 +3,17 @@ import { useAppDispatch } from './useAppDispatch'
 import { TestResultsActions } from '../redux/slices/TestResult'
 
 interface useCalcErrorExtraProps {
-  typedCorrectWords: string[]
+  allTypedCorrectWords: string[]
   showedWordsArray: string[] | []
-  typedWords: string[][]
+  allTypedWords: string[][]
   typedWord: string[]
 }
 
 const useCalcErrorExtra = ({
   showedWordsArray,
-  typedCorrectWords,
+  allTypedCorrectWords,
   typedWord,
-  typedWords,
+  allTypedWords,
 }: useCalcErrorExtraProps) => {
   const dispatch = useAppDispatch()
   const [errors, setErrors] = React.useState<number>(0)
@@ -23,19 +23,17 @@ const useCalcErrorExtra = ({
     let localExtra: number = 0
     let localErrors: number = 0
 
-    typedCorrectWords.forEach((word: string, wordI: number) => {
-      if (word.length < typedWords[wordI].length) {
-        localExtra += typedWords[wordI].length - word.length
-        // setExtra(prev => prev + typedWords[wordI].length - word.length)
+    allTypedCorrectWords.forEach((word: string, wordI: number) => {
+      if (word.length < allTypedWords[wordI].length) {
+        localExtra += allTypedWords[wordI].length - word.length
       }
 
       word
         .split('')
-        .slice(0, typedWords[wordI].length)
+        .slice(0, allTypedWords[wordI].length)
         .forEach((letter: string, letterI: number) => {
-          if (letter !== typedWords[wordI][letterI]) {
+          if (letter !== allTypedWords[wordI][letterI]) {
             localErrors += 1
-            // setErrors(prev => prev + 1)
           }
         })
     })
@@ -57,7 +55,7 @@ const useCalcErrorExtra = ({
 
     setErrors(localErrors)
     setExtra(localExtra)
-  }, [showedWordsArray, typedCorrectWords, typedWord, typedWords])
+  }, [showedWordsArray, allTypedCorrectWords, typedWord, allTypedWords])
 
   React.useEffect(() => {
     dispatch(TestResultsActions.updateExtra(extra))

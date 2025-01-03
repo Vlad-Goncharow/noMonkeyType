@@ -18,6 +18,8 @@ class StateService extends BaseService {
   setTimeElapsed: React.Dispatch<React.SetStateAction<number>>
   setTypedLetterIndex: React.Dispatch<React.SetStateAction<number>>
   setTypedWordsCount: React.Dispatch<React.SetStateAction<number>>
+  setAllTypedWords: React.Dispatch<React.SetStateAction<string[][]>>
+  setAllTypedCorrectWords: React.Dispatch<React.SetStateAction<string[]>>
 
   constructor(
     dispatch: AppDispatch,
@@ -31,7 +33,9 @@ class StateService extends BaseService {
     setErrors: React.Dispatch<React.SetStateAction<number>>,
     setTimeElapsed: React.Dispatch<React.SetStateAction<number>>,
     setTypedLetterIndex: React.Dispatch<React.SetStateAction<number>>,
-    setTypedWordsCount: React.Dispatch<React.SetStateAction<number>>
+    setTypedWordsCount: React.Dispatch<React.SetStateAction<number>>,
+    setAllTypedWords: React.Dispatch<React.SetStateAction<string[][]>>,
+    setAllTypedCorrectWords: React.Dispatch<React.SetStateAction<string[]>>
   ) {
     super(dispatch)
     this.setTypedWord = setTypedWord
@@ -45,6 +49,8 @@ class StateService extends BaseService {
     this.setTimeElapsed = setTimeElapsed
     this.setTypedLetterIndex = setTypedLetterIndex
     this.setTypedWordsCount = setTypedWordsCount
+    this.setAllTypedWords = setAllTypedWords
+    this.setAllTypedCorrectWords = setAllTypedCorrectWords
   }
 }
 

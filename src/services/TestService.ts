@@ -1,8 +1,5 @@
 import { AppDispatch } from '../redux'
-import {
-  TestTime,
-  TestType,
-} from '../redux/slices/TestConfig/types/TestConfigTypes'
+import { TestType } from '../redux/slices/TestConfig/types/TestConfigTypes'
 import { TestResultsActions } from '../redux/slices/TestResult'
 import { testStateActions } from '../redux/slices/TestState'
 import { generateText } from '../utils/wordsGenerator'
@@ -42,9 +39,14 @@ export class TestService extends BaseService {
 
     this.stateService.setWordsInput('')
     this.stateService.setTypedWords((prev) => [...prev, typedWord])
+    this.stateService.setAllTypedWords((prev) => [...prev, typedWord])
     this.stateService.setLettersDelay((prev: any) => [...prev, delayArr])
     this.stateService.setTypedLetterIndex(0)
     this.stateService.setTypedCorrectWords((prev) => [
+      ...prev,
+      showedWordsArray[0],
+    ])
+    this.stateService.setAllTypedCorrectWords((prev) => [
       ...prev,
       showedWordsArray[0],
     ])
@@ -155,9 +157,7 @@ export class TestService extends BaseService {
     delayArr: lettersDelay[],
     showedWordsArray: string[],
     isGameStarted: boolean,
-    time: TestTime | undefined,
     type: TestType | undefined,
-    timeElapsed: number,
     typedCorrectWords: string[],
     typedLetterIndex: number
   ) => {
